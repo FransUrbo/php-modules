@@ -37,7 +37,7 @@ clean:
 	-$(MAKE) distclean
 	rm -fr acinclude.m4 dynlib.m4 configure.in install-sh mkinstalldirs missing \
 		aclocal.m4 config.h.in configure config.guess config.sub ltmain.sh \
-		configure-stamp libs.mk .deps build modules
+		configure-stamp libs.mk .deps build modules reference/functions.xml
 
 	dh_clean
 
