@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- $Revision: 1.2 $ -->
+<!-- $Revision: 1.3 $ -->
 <section id="idn.configuration">
  &reftitle.runtime;
  &extension.runtime;
@@ -35,6 +35,48 @@
  </table>
  For further details and definition of the PHP_INI_* constants see
  <function>ini_set</function>.
+ </para>
+
+ &ini.descriptions.title;
+
+ <para>
+  <variablelist>
+   <varlistentry id="ini.allow_unassigned_chars">
+    <term>
+     <parameter>allow_unassigned_chars</parameter>
+     <type>boolean</type>
+    </term>
+    <listitem>
+     <para>
+      Whether to allow unassigned characters.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="ini.use_std_3_ascii_rules">
+    <term>
+     <parameter>use_std_3_ascii_rules</parameter>
+     <type>boolean</type>
+    </term>
+    <listitem>
+     <para>
+      Whether to use the STD3 ASCII rules.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="ini.default_charset">
+    <term>
+     <parameter>default_charset</parameter>
+     <type>string</type>
+    </term>
+    <listitem>
+     <para>
+      What charset to use if not specified in call to function(s).
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
  </para>
 </section>
 
