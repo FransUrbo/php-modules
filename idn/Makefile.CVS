@@ -28,7 +28,7 @@ tag:
 	  VERSION="`echo $$MAJOR`.`echo $$NEWLV`"; \
 	  echo "We are now at version $$VERSION"; \
 	  TAG="REL_`echo $$MAJOR`_`echo $$NEWLV`"; \
-	  echo -n $$TAG > .tag; \
+	  echo $$TAG > .tag; \
 	  cvs commit -m "New release - $$MAJOR.$$MINOR." \
 		.version .version.old; \
 	  cvs tag -RF $$TAG; \
@@ -38,7 +38,7 @@ install: $(INSTDIR) clean
 	@(echo -n "Instdir:   $(INSTDIR): "; find | cpio -p $(INSTDIR))
 
 tarball: install
-	@(rm -Rf $(INSTDIR)/cvsMakefile $(INSTDIR)/.version.old; \
+	@(rm -f $(INSTDIR)/Makefile.CVS $(INSTDIR)/.version.old $(INSTDIR)/.tag; \
 	  cd $(INSTDIR) && find -type d -name CVS -o -name '.cvsignore' -o -name '*~' | \
 		xargs rm -rf; \
 	  echo -n "Tarball 1: $(TMPDIR)/idn_$(VERSION).tar.gz: "; \
