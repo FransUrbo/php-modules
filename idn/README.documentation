@@ -24,6 +24,8 @@ This will take some time, because (unfortunatly!) it builds EVERYTHING
 (not only the PHP-IDN stuff).
 
 ----- s n i p -----
-cd /tmp/phpdoc/en/reference/idn
+cd /tmp/phpdoc
+autoconf
+./configure
 make
 ----- s n i p -----
