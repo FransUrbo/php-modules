@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- $Revision: 1.1 $ -->
+<!-- $Revision: 1.2 $ -->
   <refentry id='function.idn_allow_unassigned'>
    <refnamediv>
     <refname>idn_allow_unassigned</refname>
     <refpurpose>
-     Translate 8859 characters to t61 characters
+     Toggle IDNA AllowUnassigned flag
     </refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
      <methodsynopsis>
-      <type>string</type><methodname>idn_allow_unassigned</methodname>
-      <methodparam><type>string</type><parameter>value</parameter></methodparam>
+      <type>bool</type><methodname>idn_allow_unassigned</methodname>
+      <void />
      </methodsynopsis>
     <para>
      &warn.undocumented.func;

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- $Revision: 1.1 $ -->
+<!-- $Revision: 1.2 $ -->
   <refentry id='function.idn_get_use_std3_ascii_rules'>
    <refnamediv>
     <refname>idn_get_use_std3_ascii_rules</refname>
     <refpurpose>
-     Translate 8859 characters to t61 characters
+     Return the value of the IDNA UseSTD3ASCIIRules flag
     </refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
      <methodsynopsis>
-      <type>string</type><methodname>idn_get_use_std3_ascii_rules</methodname>
-      <methodparam><type>string</type><parameter>value</parameter></methodparam>
+      <type>bool</type><methodname>idn_get_use_std3_ascii_rules</methodname>
+      <void />
      </methodsynopsis>
     <para>
      &warn.undocumented.func;

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- $Revision: 1.1 $ -->
+<!-- $Revision: 1.2 $ -->
   <refentry id='function.idn_prep_iscsi'>
    <refnamediv>
     <refname>idn_prep_iscsi</refname>
     <refpurpose>
-     Translate 8859 characters to t61 characters
+     Prepare string according to the iSCSI profile
     </refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
      <methodsynopsis>
       <type>string</type><methodname>idn_prep_iscsi</methodname>
-      <methodparam><type>string</type><parameter>value</parameter></methodparam>
+      <methodparam><type>string</type><parameter>string</parameter></methodparam>
+      <methodparam choice="opt"><type>string</type><parameter>charset</parameter></methodparam>
      </methodsynopsis>
     <para>
      &warn.undocumented.func;
