@@ -24,7 +24,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.25 2004-02-05 13:59:30 turbo Exp $ */
+/* $Id: idn.c,v 0.26 2004-02-05 15:07:56 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -106,7 +106,6 @@ function_entry idn_functions[] = {
 	PHP_FE(idn_punycode_encode,				NULL)
 	PHP_FE(idn_punycode_decode,				NULL)
 	PHP_FE(idn_to_ascii,					NULL)
-	PHP_FE(idn_to_utf8,						NULL)
 	PHP_FE(idn_to_unicode,					NULL)
 
 	{NULL, NULL, NULL}	/* Must be the last line in idn_functions[] */
@@ -185,7 +184,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.25 2004-02-05 13:59:30 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.26 2004-02-05 15:07:56 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -746,36 +745,6 @@ PHP_FUNCTION(idn_to_ascii)
 		RETURN_FALSE;
 }
 /* }}} */
-
-/* {{{ proto string idn_to_utf8(string input [, string charset])
-   Convert from ACE according to IDNA
- */
-PHP_FUNCTION(idn_to_utf8)
-{
-	char *output;
-	char *charset = IDNG(default_charset);
-	pval **yyinput, **yycharset;
-	int argv = ZEND_NUM_ARGS();
-
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
-        WRONG_PARAM_COUNT;
-    }
-    convert_to_string_ex(yyinput);
-
-	if(argv == 2) {
-		convert_to_string_ex(yycharset);
-		charset=(*yycharset)->value.str.val;
-	}
-
-	output = idn((*yyinput)->value.str.val, IDN_IDNA_TO_UNICODE, "UTF-8");
-	if (output)
-	{
-		RETVAL_STRINGL(output, strlen(output), 1);
-		efree(output);
-	}
-	else
-		RETURN_FALSE;
-}
 
 /* }}} */
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- $Revision: 1.4 $ -->
+<!-- $Revision: 1.5 $ -->
  <reference id="ref.idn">
   <title>IDN functions</title>
   <titleabbrev>IDN</titleabbrev>
@@ -66,8 +66,8 @@
    <section id="idn.examples">
     &reftitle.examples;
     <para>
-     Convert the string räksmörgås.josefßon.org to a value that can
-     be used in the DNS system.
+     Convert the ISO-8859-1 encoded string räksmörgås.josefßon.org to a 
+     value that can be used in the DNS system.
     </para>
     <example>
      <title>IDN conversion example</title>
@@ -82,15 +82,15 @@ echo idn_to_ascii('räksmörgås.josefßon.org', 'ISO-8859-1');
 
     <para>
      Convert the string xn--rksmrgs-5wao1o.josefsson.org (that was the
-     result from the example above) to a value that is UTF-8 encoded
-     (ie, with international characters).
+     result from the example above) to a value that is ISO-8859-1 encoded
+     (i.e., the standard Western European 8-bit character set).
     </para>
     <example>
      <title>IDN conversion example</title>
      <programlisting role="php">
 <![CDATA[
 <?php
-echo idn_to_utf8('xn--rksmrgs-5wao1o.josefsson.org, 'ISO-8859-1');
+echo idn_to_unicode('xn--rksmrgs-5wao1o.josefsson.org, 'ISO-8859-1');
 ?>
 ]]>
      </programlisting>

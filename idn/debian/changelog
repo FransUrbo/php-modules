@@ -1,3 +1,9 @@
+php4-idn (0.10-1) unstable; urgency=low
+
+  * Removed idn_to_utf8() - idn_to_unicode() does this job now.
+
+ -- Turbo Fredriksson <turbo@debian.org>  Thu,  5 Feb 2004 16:10:02 +0100
+
 php4-idn (0.9-1) unstable; urgency=low
 
   * Readding idn_to_unicode().

@@ -59,7 +59,6 @@ PHP_FUNCTION(idn_prep_iscsi);
 PHP_FUNCTION(idn_punycode_encode);
 PHP_FUNCTION(idn_punycode_decode);
 PHP_FUNCTION(idn_to_ascii);
-PHP_FUNCTION(idn_to_utf8);
 PHP_FUNCTION(idn_to_unicode);
 
 /* Global variables (toggles etc) */

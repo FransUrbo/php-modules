@@ -10,3 +10,4 @@ Thomas Jacob
 	  - Shortened by usage of other LibIDN functions.
 	* Make sure PHP-IDN return PHP warnings instead of errors when
 	  something bad happens (application must deal with warning manually).
+	* Removed idn_to_utf8() - idn_to_unicode() does this job now.

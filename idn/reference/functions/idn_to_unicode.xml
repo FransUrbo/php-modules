@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- $Revision: 1.5 $ -->
+<!-- $Revision: 1.6 $ -->
   <refentry id='function.idn_to_unicode'>
    <refnamediv>
     <refname>idn_to_unicode</refname>
@@ -18,7 +18,7 @@
      Returns a IDNA encoded (default_charset or charset) string.
     </para>
     <para>
-     <function>idn_to_unicode</function> returns a IDN encoded string
+     <function>idn_to_unicode</function> returns an IDN encoded string
      <example>
       <title>Relevant IDN Statements</title>
       <programlisting role="php">

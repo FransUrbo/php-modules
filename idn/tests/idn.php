@@ -1,5 +1,5 @@
 <?php
-/* $Id: idn.php,v 1.7 2004-02-02 16:01:19 turbo Exp $ */
+/* $Id: idn.php,v 1.8 2004-02-05 15:08:17 turbo Exp $ */
 
 // Set the locale to UTF-8
 if(!$charset) {
@@ -32,7 +32,7 @@ function pql_execute($command, $hide=true) {
     return $ret;
 }
 
-if(function_exists("idn_to_utf8") && function_exists("idn_to_ascii")) {
+if(function_exists("idn_to_unicode") && function_exists("idn_to_ascii")) {
   if($domain) {
     // Convert the value
     if($form) {
@@ -57,8 +57,6 @@ if(function_exists("idn_to_utf8") && function_exists("idn_to_ascii")) {
 	$domain_out = idn_to_ascii($domain, $charset);
       elseif($rule == '2uni')
 	$domain_out = idn_to_unicode($domain, $charset);
-      elseif($rule == '2utf8')
-	$domain_out = idn_to_utf8($domain, $charset);
       elseif($rule == 'punyencode')
 	$domain_out = idn_punycode_encode($domain, $charset);
       elseif($rule == 'punydecode')
@@ -76,7 +74,6 @@ if(function_exists("idn_to_utf8") && function_exists("idn_to_ascii")) {
       <input type="text" name="domain" value="<?=$domain?>" size="50">
       <select name="rule">
         <option value="2ascii">UNICODE 2 ASCII</option>
-        <option value="2utf8">ASCII 2 UTF-8</option>
         <option value="2uni">ASCII 2 UNICODE</option>
 	<option value="punyencode">PUNYCODE ENCODE</option>
 	<option value="punydecode">PUNYCODE DECODE</option>
@@ -108,7 +105,7 @@ if(function_exists("idn_to_utf8") && function_exists("idn_to_ascii")) {
 ?>
     <a href="idna.php.txt">show code</a>
 <?php
-    die("Module IDN isn't loaded (can't find function idn_to_utf8 and/or idn_to_ascii)");
+    die("Module IDN isn't loaded (can't find function idn_to_unicode and/or idn_to_ascii)");
 }
 ?>
   </body>
