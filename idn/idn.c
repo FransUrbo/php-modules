@@ -17,7 +17,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.8 2003-11-06 19:25:30 turbo Exp $ */
+/* $Id: idn.c,v 0.9 2003-11-07 08:23:55 turbo Exp $ */
 
 #define IS_EXT_MODULE
 
@@ -66,6 +66,12 @@ function_entry idn_functions[] = {
 
 	PHP_FE(idn_get_allow_unassigned,		NULL)
 	PHP_FE(idn_get_use_std3_ascii_rules,	NULL)
+
+	PHP_FE(idn_stringprep,					NULL)
+	PHP_FE(idn_punycode_encode,				NULL)
+	PHP_FE(idn_punycode_decode,				NULL)
+	PHP_FE(idn_unicode_to_ascii,			NULL)
+	PHP_FE(idn_ascii_to_unicode,			NULL)
 
 	PHP_FE(idn,								NULL)
 
@@ -141,7 +147,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.8 2003-11-06 19:25:30 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.9 2003-11-07 08:23:55 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -221,6 +227,71 @@ PHP_FUNCTION(idn_get_allow_unassigned)
 PHP_FUNCTION(idn_get_use_std3_ascii_rules)
 {
 	RETURN_BOOL(IDNG(usestd3asciirules));
+}
+/* }}} */
+
+/* {{{ proto string idn_stringprep(string input)
+ */
+PHP_FUNCTION(idn_stringprep)
+{
+	pval **yyinput;
+    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+        WRONG_PARAM_COUNT;
+    }
+
+	idn(yyinput, IDN_STRINGPREP);
+}
+/* }}} */
+
+/* {{{ proto string idn_punycode_encode(string input)
+ */
+PHP_FUNCTION(idn_punycode_encode)
+{
+	pval **yyinput;
+    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+        WRONG_PARAM_COUNT;
+    }
+
+	idn(yyinput, IDN_PUNYCODE_ENCODE);
+}
+/* }}} */
+
+/* {{{ proto string idn_punycode_decode(string input)
+ */
+PHP_FUNCTION(idn_punycode_decode)
+{
+	pval **yyinput;
+    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+        WRONG_PARAM_COUNT;
+    }
+
+	idn(yyinput, IDN_PUNYCODE_DECODE);
+}
+/* }}} */
+
+/* {{{ proto string idn_unicode_to_ascii(string input)
+ */
+PHP_FUNCTION(idn_unicode_to_ascii)
+{
+	pval **yyinput;
+    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+        WRONG_PARAM_COUNT;
+    }
+
+	idn(yyinput, IDN_IDNA_TO_ASCII);
+}
+/* }}} */
+
+/* {{{ proto string idn_ascii_to_unicode(string input)
+ */
+PHP_FUNCTION(idn_ascii_to_unicode)
+{
+	pval **yyinput;
+    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+        WRONG_PARAM_COUNT;
+    }
+
+	idn(yyinput, IDN_IDNA_TO_UNICODE);
 }
 /* }}} */
 
