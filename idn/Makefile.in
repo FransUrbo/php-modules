@@ -1,0 +1,8 @@
+# $Id: Makefile.in,v 0.0 2003-10-29 14:18:24 turbo Exp $
+
+LTLIBRARY_NAME        = libidn.la
+LTLIBRARY_SOURCES     = idn.c
+LTLIBRARY_SHARED_NAME = idn.la
+LTLIBRARY_SHARED_LIBADD  = $(IDN_SHARED_LIBADD)
+
+include $(top_srcdir)/build/dynlib.mk
