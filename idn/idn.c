@@ -24,7 +24,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.22 2004-01-30 06:53:11 turbo Exp $ */
+/* $Id: idn.c,v 0.23 2004-01-30 07:00:30 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -184,7 +184,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.22 2004-01-30 06:53:11 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.23 2004-01-30 07:00:30 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -199,6 +199,8 @@ PHP_MINFO_FUNCTION(idn)
  */
 static int idn_charset(char *charset)
 {
+	TSRMLS_FETCH();
+	
 	if(charset == NULL)
 		// Set default charset - ISO-8859-1
 		return(setenv("CHARSET", IDNG(default_charset), 1));
@@ -274,6 +276,8 @@ static char *idn(char *input, int rule)
 	int rc;
 	uint32_t *q;
 	size_t len, len2;
+
+	TSRMLS_FETCH();
 
 	switch(rule) {
 		/* {{{ idn -e : punycode_encode() */
