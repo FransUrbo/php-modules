@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- $Revision: 1.3 $ -->
+<!-- $Revision: 1.4 $ -->
  <reference id="ref.idn">
   <title>IDN functions</title>
   <titleabbrev>IDN</titleabbrev>
@@ -82,7 +82,7 @@ echo idn_to_ascii('räksmörgås.josefßon.org', 'ISO-8859-1');
 
     <para>
      Convert the string xn--rksmrgs-5wao1o.josefsson.org (that was the
-     result from the example above) to a value that is UNICODE encoded
+     result from the example above) to a value that is UTF-8 encoded
      (ie, with international characters).
     </para>
     <example>
@@ -90,7 +90,7 @@ echo idn_to_ascii('räksmörgås.josefßon.org', 'ISO-8859-1');
      <programlisting role="php">
 <![CDATA[
 <?php
-echo idn_to_unicode('xn--rksmrgs-5wao1o.josefsson.org, 'ISO-8859-1');
+echo idn_to_utf8('xn--rksmrgs-5wao1o.josefsson.org, 'ISO-8859-1');
 ?>
 ]]>
      </programlisting>

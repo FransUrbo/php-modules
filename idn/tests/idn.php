@@ -1,7 +1,14 @@
-<?php /* $Id: idn.php,v 1.5 2003-11-09 14:52:31 turbo Exp $ */ ?>
+<?php
+/* $Id: idn.php,v 1.6 2003-11-11 13:27:29 turbo Exp $ */
+
+// Set the locale to UTF-8
+if(!$charset) {
+  $charset = 'ISO-8859-1';
+}
+?>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Type" content="text/html; charset=<?=$charset?>">
   </head>
 
   <body>
@@ -25,10 +32,7 @@ function pql_execute($command, $hide=true) {
     return $ret;
 }
 
-if(function_exists("idn_to_unicode") && function_exists("idn_to_ascii")) {
-  // Set the locale to UTF-8
-  $charset = 'ISO-8859-1';
-	
+if(function_exists("idn_to_utf8") && function_exists("idn_to_ascii")) {
   if($domain) {
     // Convert the value
     if($form) {
@@ -51,8 +55,8 @@ if(function_exists("idn_to_unicode") && function_exists("idn_to_ascii")) {
     } else {
       if($rule == '2ascii')
 	$domain_out = idn_to_ascii($domain, $charset);
-      elseif($rule == '2unicode')
-	$domain_out = idn_to_unicode($domain, $charset);
+      elseif($rule == '2utf8')
+	$domain_out = idn_to_utf8($domain, $charset);
       elseif($rule == 'punyencode')
 	$domain_out = idn_punycode_encode($domain, $charset);
       elseif($rule == 'punydecode')
@@ -70,10 +74,11 @@ if(function_exists("idn_to_unicode") && function_exists("idn_to_ascii")) {
       <input type="text" name="domain" value="<?=$domain?>" size="50">
       <select name="rule">
         <option value="2ascii">UNICODE 2 ASCII</option>
-        <option value="2unicode">ASCII 2 UNICODE</option>
+        <option value="2utf8">ASCII 2 UTF-8</option>
 	<option value="punyencode">PUNYCODE ENCODE</option>
 	<option value="punydecode">PUNYCODE DECODE</option>
       </select>
+<?php include("charsets.php"); ?>
       <input type="submit" value="Convert">
     </form>
 
@@ -90,6 +95,7 @@ if(function_exists("idn_to_unicode") && function_exists("idn_to_ascii")) {
 	<option value="sasl">SASLprep</option>
 	<option value="iscsi">ISCSIprep</option>
       </select>
+<?php include("charsets.php"); ?>
       <input type="submit" value="Convert">
     </form>
 
@@ -99,7 +105,7 @@ if(function_exists("idn_to_unicode") && function_exists("idn_to_ascii")) {
 ?>
     <a href="idna.php.txt">show code</a>
 <?php
-    die("Module IDN isn't loaded (can't find function idn_to_unicode and/or idn_to_unicode)");
+    die("Module IDN isn't loaded (can't find function idn_to_utf8 and/or idn_to_ascii)");
 }
 ?>
   </body>

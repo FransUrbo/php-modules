@@ -18,7 +18,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.18 2003-11-11 13:19:47 turbo Exp $ */
+/* $Id: idn.c,v 0.19 2003-11-11 13:26:20 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -100,7 +100,7 @@ function_entry idn_functions[] = {
 	PHP_FE(idn_punycode_encode,				NULL)
 	PHP_FE(idn_punycode_decode,				NULL)
 	PHP_FE(idn_to_ascii,					NULL)
-	PHP_FE(idn_to_unicode,					NULL)
+	PHP_FE(idn_to_utf8,						NULL)
 
 	{NULL, NULL, NULL}	/* Must be the last line in idn_functions[] */
 };
@@ -174,7 +174,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.18 2003-11-11 13:19:47 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.19 2003-11-11 13:26:20 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -695,10 +695,10 @@ PHP_FUNCTION(idn_to_ascii)
 }
 /* }}} */
 
-/* {{{ proto string idn_to_unicode(string input [, string charset])
+/* {{{ proto string idn_to_utf8(string input [, string charset])
    Convert from ACE according to IDNA
  */
-PHP_FUNCTION(idn_to_unicode)
+PHP_FUNCTION(idn_to_utf8)
 {
 	char *output;
 	pval **yyinput, **yycharset;
