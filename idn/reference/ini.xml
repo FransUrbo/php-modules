@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- $Revision: 1.1 $ -->
+<!-- $Revision: 1.2 $ -->
 <section id="idn.configuration">
  &reftitle.runtime;
  &extension.runtime;
@@ -16,13 +16,18 @@
    </thead>
    <tbody>
     <row>
-     <entry>idn.allowunassigned</entry>
+     <entry>idn.allow_unassigned_chars</entry>
      <entry>"0"</entry>
      <entry>PHP_INI_ALL</entry>
     </row>
     <row>
-     <entry>idn.usestd3asciirules</entry>
+     <entry>idn.use_std_3_ascii_rules</entry>
      <entry>"0"</entry>
+     <entry>PHP_INI_ALL</entry>
+    </row>
+    <row>
+     <entry>idn.default_charset</entry>
+     <entry>"ISO-8859-1"</entry>
      <entry>PHP_INI_ALL</entry>
     </row>
    </tbody>
