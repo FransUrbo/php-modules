@@ -17,7 +17,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.11 2003-11-07 18:00:41 turbo Exp $ */
+/* $Id: idn.c,v 0.12 2003-11-08 06:44:58 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -61,11 +61,20 @@ ZEND_GET_MODULE(idn)
 
 /* {{{ idn() function rules
  */
-#define IDN_STRINGPREP			0
-#define IDN_PUNYCODE_ENCODE		1
-#define IDN_PUNYCODE_DECODE		2
-#define IDN_IDNA_TO_ASCII		3
-#define IDN_IDNA_TO_UNICODE		4
+#define IDN_STRINGPREP				0
+#define IDN_PUNYCODE_ENCODE			1
+#define IDN_PUNYCODE_DECODE			2
+#define IDN_IDNA_TO_ASCII			3
+#define IDN_IDNA_TO_UNICODE			4
+
+#define IDN_PROFILE_PREP_NAME		0
+#define IDN_PROFILE_PREP_KRB		1
+#define IDN_PROFILE_PREP_NODE		2
+#define IDN_PROFILE_PREP_RESOURCE	3
+#define IDN_PROFILE_PREP_PLAIN		4
+#define IDN_PROFILE_PREP_TRACE		5
+#define IDN_PROFILE_PREP_SASL		6
+#define IDN_PROFILE_PREP_ISCSI		7
 /* }}} */
 
 /* --------------------- */
@@ -161,7 +170,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.11 2003-11-07 18:00:41 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.12 2003-11-08 06:44:58 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -470,7 +479,7 @@ PHP_FUNCTION(idn_punycode_encode)
  */
 PHP_FUNCTION(idn_punycode_decode)
 {
-	char *input, output;
+	char *input, *output;
 	pval **yyinput;
 
     if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
