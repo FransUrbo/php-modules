@@ -1,3 +1,14 @@
+php4-idn (0.9-1) unstable; urgency=low
+
+  * Readding idn_to_unicode().
+  * Build depend on libidn11-dev OR libidn9-dev.
+  * Removing the need for the environment variable CHARSET.
+  * Lots of more memory leaks fixed
+  * Slight rewrite of idn_idna_to_ascii() and idn_unicode_to_ascii()
+    - Shortened by usage of other LibIDN functions.
+
+ -- Turbo Fredriksson <turbo@debian.org>  Tue,  3 Feb 2004 07:39:14 +0100
+
 php4-idn (0.8-1) unstable; urgency=low
 
   * New upstream release. Memory leaks fixed
