@@ -24,7 +24,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.28 2004-04-18 13:41:37 turbo Exp $ */
+/* $Id: idn.c,v 0.29 2004-05-25 14:01:24 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -194,8 +194,9 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.28 2004-04-18 13:41:37 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.29 2004-05-25 14:01:24 turbo Exp $" );
 	php_info_print_table_end();
+	DISPLAY_INI_ENTRIES();
 }
 /* }}} */
 

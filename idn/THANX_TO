@@ -11,3 +11,7 @@ Thomas Jacob
 	* Make sure PHP-IDN return PHP warnings instead of errors when
 	  something bad happens (application must deal with warning manually).
 	* Adding TLD check from newer LibIDN (>0.4.0).
+
+Oden Eriksson
+	* For patch to show PHP version PHP-IDN was build against as well
+	  as the PHP IDN version.
