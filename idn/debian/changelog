@@ -4,6 +4,28 @@ php4-idn (0.10-1) unstable; urgency=low
 
  -- Turbo Fredriksson <turbo@debian.org>  Thu,  5 Feb 2004 16:10:02 +0100
 
+php4-idn (0.9-3) unstable; urgency=low
+
+  * Don't recommend php4-apache (don't know where that came from).
+    Closes: #240563
+  * Install module into '/usr/lib/php4/20020429/' using the output
+    from 'php-config --extension-dir' which will correctly give this
+    directory even in the future.
+    Closes: #240118
+  * Find what PHP API version to depend on (=> ${php:Depends}), not
+    php4-{cgi,pear}.
+    Closes: #242237
+
+ -- Turbo Fredriksson <turbo@debian.org>  Tue, 13 Apr 2004 09:39:46 +0200
+
+php4-idn (0.9-2) unstable; urgency=low
+
+  * Recompile on a TRUE unstable box.
+  * Put the module in '/usr/lib/php4/', not '/usr/lib/php4/2001.../' etc.
+    Closes: #233049.
+
+ -- Turbo Fredriksson <turbo@debian.org>  Sat, 21 Feb 2004 10:28:53 +0100
+
 php4-idn (0.9-1) unstable; urgency=low
 
   * Readding idn_to_unicode().
