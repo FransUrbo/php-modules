@@ -24,7 +24,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.27 2004-04-18 08:39:40 turbo Exp $ */
+/* $Id: idn.c,v 0.28 2004-04-18 13:41:37 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -64,6 +64,9 @@ ZEND_GET_MODULE(idn)
 #include <stringprep.h>
 #include <punycode.h>
 #include <idna.h>
+#ifdef HAVE_IDN_TLD
+#include <tld.h>
+#endif
 /* }}} */
 
 /* {{{ LibIDN defines
@@ -108,6 +111,12 @@ function_entry idn_functions[] = {
 	PHP_FE(idn_to_ascii,					NULL)
 	PHP_FE(idn_to_utf8,						NULL)
 	PHP_FE(idn_to_unicode,					NULL)
+
+#ifdef HAVE_IDN_TLD
+	PHP_FE(tld_check,						NULL)
+	PHP_FE(tld_get,							NULL)
+	PHP_FE(tld_get_table,					NULL)
+#endif
 
 	{NULL, NULL, NULL}	/* Must be the last line in idn_functions[] */
 };
@@ -185,7 +194,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.27 2004-04-18 08:39:40 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.28 2004-04-18 13:41:37 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -408,7 +417,7 @@ PHP_FUNCTION(idn_prep_name)
 	pval **yyinput, **yycharset;
 	int argv = ZEND_NUM_ARGS();
 
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
+    if ((argv < 1) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
@@ -434,7 +443,7 @@ PHP_FUNCTION(idn_prep_kerberos5)
 	pval **yyinput, **yycharset;
 	int argv = ZEND_NUM_ARGS();
 
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
+    if ((argv < 1) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
@@ -460,7 +469,7 @@ PHP_FUNCTION(idn_prep_node)
 	pval **yyinput, **yycharset;
 	int argv = ZEND_NUM_ARGS();
 
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
+    if ((argv < 1) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
@@ -486,7 +495,7 @@ PHP_FUNCTION(idn_prep_resource)
 	pval **yyinput, **yycharset;
 	int argv = ZEND_NUM_ARGS();
 
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
+    if ((argv < 1) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
@@ -512,7 +521,7 @@ PHP_FUNCTION(idn_prep_plain)
 	pval **yyinput, **yycharset;
 	int argv = ZEND_NUM_ARGS();
 
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
+    if ((argv < 1) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
@@ -538,7 +547,7 @@ PHP_FUNCTION(idn_prep_trace)
 	pval **yyinput, **yycharset;
 	int argv = ZEND_NUM_ARGS();
 
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
+    if ((argv < 1) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
@@ -564,7 +573,7 @@ PHP_FUNCTION(idn_prep_sasl)
 	pval **yyinput, **yycharset;
 	int argv = ZEND_NUM_ARGS();
 
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
+    if ((argv < 1) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
@@ -590,7 +599,7 @@ PHP_FUNCTION(idn_prep_iscsi)
 	pval **yyinput, **yycharset;
 	int argv = ZEND_NUM_ARGS();
 
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
+    if ((argv < 1) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
@@ -620,7 +629,7 @@ PHP_FUNCTION(idn_punycode_encode)
 	pval **yyinput, **yycharset;
 	int argv = ZEND_NUM_ARGS();
 
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
+    if ((argv < 1) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
@@ -646,7 +655,7 @@ PHP_FUNCTION(idn_punycode_decode)
 	pval **yyinput, **yycharset;
 	int argv = ZEND_NUM_ARGS();
 
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
+    if ((argv < 1) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
@@ -676,7 +685,7 @@ PHP_FUNCTION(idn_to_ascii)
 	pval **yyinput, **yycharset;
 	int argv = ZEND_NUM_ARGS();
 
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
+    if ((argv < 1) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
@@ -702,7 +711,7 @@ PHP_FUNCTION(idn_to_utf8)
 	pval **yyinput, **yycharset;
 	int argv = ZEND_NUM_ARGS();
 
-    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
+    if ((argv < 1) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
@@ -745,6 +754,184 @@ PHP_FUNCTION(idn_to_unicode)
 }
 
 /* }}} */
+
+#ifdef HAVE_IDN_TLD
+
+/* {{{ proto boolean/null tld_check(string input , ref integer errpos[, string charset[, string tld])
+   Test input for valid extra characters defined the relevant TLD,
+   returning the position of the offending character in errpos and FALSE
+   as a result if nonconformance is detected. Returns NULL on other error
+   conditions and TRUE on success, in both cases errpos is not touched.
+   Charset maybe be specified as in the other functions of this api, the tld parameter
+   allows one to overwrite automatic tld detection in the input string.
+ */
+PHP_FUNCTION(tld_check)
+{
+	char *tmpstring;
+	char *tmpstring2;
+	const Tld_table * tld = NULL;
+	uint32_t *q;
+	int rc;
+	size_t len, errpos = -1;
+	char *charset = IDNG(default_charset);
+	zval **yyinput, **yyerrpos, **yycharset, **yytld;
+	int argv = ZEND_NUM_ARGS();
+
+    if ((argv < 2) || (argv > 4) || (zend_get_parameters_ex(argv, &yyinput,
+			&yyerrpos, &yycharset, &yytld) == FAILURE)) {
+        WRONG_PARAM_COUNT;
+    }
+
+    convert_to_string_ex(yyinput);
+
+	if (!PZVAL_IS_REF(*yyerrpos)) {
+		zend_error(E_ERROR, "IDN_TLD_CHECK: Parameter wasn't passed by reference");
+		RETURN_NULL();
+	}
+		
+	
+	if(argv >= 3) {
+		convert_to_string_ex(yycharset);
+		charset=(*yycharset)->value.str.val;
+	}
+
+	if(argv == 4) {
+		convert_to_string_ex(yytld);
+		tld = tld_default_table((*yytld)->value.str.val, NULL);
+	}
+
+    tmpstring = stringprep_convert((*yyinput)->value.str.val, "UTF-8", charset);
+	if(!tmpstring) {
+		zend_error(E_WARNING, "IDN_TLD_CHECK: Could not convert from locale (%s) to UTF-8", charset);
+		RETURN_NULL();
+	}
+
+	rc = stringprep_profile(tmpstring, &tmpstring2, "Nameprep", 0);
+	free(tmpstring);
+	if (rc != STRINGPREP_OK) {
+		zend_error(E_ERROR, "IDN_TLD_CHECK: Could not setup nameprep profile: %d", rc);
+		RETURN_NULL();
+	}
+
+	if (argv == 4) {
+		if (tld) {
+			q = stringprep_utf8_to_ucs4(tmpstring2, -1, &len);
+			free(tmpstring2);
+			if (!q) {
+				zend_error(E_WARNING, "IDN_TLD_CHECK: Could not convert from UTF-8 to UCS-4");
+				RETURN_NULL();
+			}
+			rc = tld_check_4t(q, len, &errpos, tld);
+			free(q);
+		}
+		else {
+			free(tmpstring2);
+			rc = TLD_SUCCESS;
+		}
+	}
+	else {
+		rc = tld_check_8z(tmpstring2, &errpos, NULL);
+		free(tmpstring2);
+	}
+	
+	if (rc == TLD_SUCCESS) {
+		RETURN_TRUE
+	} else if (rc == TLD_INVALID) {
+		ZVAL_LONG(*yyerrpos, errpos);
+		RETURN_FALSE;
+	}
+	else
+		RETURN_NULL();
+}
+
+/* }}} */
+
+/* {{{ proto string/NULL tld_get(string input)
+   Return TLD of hostname input, or NULL
+   if none could be found
+ */
+PHP_FUNCTION(tld_get)
+{
+	char *tmpstring = NULL;
+	int rc;
+	zval **yyinput;
+	int argv = ZEND_NUM_ARGS();
+
+    if ((argv != 1) || (zend_get_parameters_ex(argv, &yyinput) == FAILURE)) {
+        WRONG_PARAM_COUNT;
+    }
+
+    convert_to_string_ex(yyinput);
+
+    rc = tld_get_z((*yyinput)->value.str.val, &tmpstring);
+	if(rc == TLD_SUCCESS && tmpstring) {
+		RETVAL_STRING(tmpstring, 1);
+		free(tmpstring);
+	} else {
+		RETURN_NULL();
+	}
+}
+
+/* }}} */
+
+/* {{{ proto TABLE tld_get_table(string tld)
+   Retrieves an array detailing restriction information on TLD tld or
+   NULL if no such info could be found 
+*/
+PHP_FUNCTION(tld_get_table)
+{
+	const Tld_table * tld_table = NULL;
+	int rc;
+	int ok = 0;
+	int ok_loop = 0;
+	zval **yyinput;
+	zval *intervals;
+	zval *interval;
+	const Tld_table_element *e;
+	size_t pos;
+	int argv = ZEND_NUM_ARGS();
+
+    if ((argv != 1) || (zend_get_parameters_ex(argv, &yyinput) == FAILURE)) {
+        WRONG_PARAM_COUNT;
+    }
+
+    convert_to_string_ex(yyinput);
+
+	tld_table = tld_default_table((*yyinput)->value.str.val, NULL);
+	if (tld_table) {
+		if(array_init(return_value) == SUCCESS)
+		if(add_assoc_string(return_value, "name", tld_table->name, 1) == SUCCESS)
+		if(add_assoc_string(return_value, "version", tld_table->version, 1) == SUCCESS)
+		if(add_assoc_long(return_value, "nvalid", tld_table->nvalid) == SUCCESS) {
+			MAKE_STD_ZVAL(intervals);
+			if (array_init(intervals) == SUCCESS) {
+				for (pos=0, e = tld_table->valid; pos<tld_table->nvalid; pos++,e++)
+				{
+					ok_loop=0;
+					MAKE_STD_ZVAL(interval);
+					if (array_init(interval) == SUCCESS)
+					if (add_assoc_long(interval, "start", e->start) == SUCCESS)
+					if (add_assoc_long(interval, "end", e->end) == SUCCESS)
+					if (add_next_index_zval(intervals, interval) == SUCCESS)
+						ok_loop = 1;
+					if (!ok_loop)
+						break;
+				}
+				if (ok_loop)
+				if (add_assoc_zval(return_value, "valid", intervals) == SUCCESS)
+					ok=1;
+			}
+		}
+		if (ok) /* phew */
+			return;
+		zend_error(E_WARNING, "IDN_TLD_GET_TABLE: Couldn't create result array, maybe out of memory?");
+	}
+	RETURN_NULL();
+
+}
+/* }}} */
+
+#endif /* #ifdef HAVE_TLD */
 
 /*
  * Local variables:
