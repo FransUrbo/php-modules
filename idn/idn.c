@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP version 4.0                                                      |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997, 1998, 1999, 2000, 2001 The PHP Group             |
+   | Copyright (c) 2003 Turbo Fredriksson                                 |
    +----------------------------------------------------------------------+
    | This source file is subject to version 2.02 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
@@ -18,7 +18,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.15 2003-11-10 12:38:14 turbo Exp $ */
+/* $Id: idn.c,v 0.16 2003-11-10 17:51:13 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -173,7 +173,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.15 2003-11-10 12:38:14 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.16 2003-11-10 17:51:13 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
