@@ -1,0 +1,16 @@
+--- global.ent.orig	Sun Nov  9 17:10:52 2003
++++ global.ent	Sun Nov  9 17:20:06 2003
+@@ -104,6 +104,13 @@
+ <!ENTITY url.iiscfg "http://www.genusa.com/iis/iiscfg.html">
+ <!ENTITY url.imap "ftp://ftp.cac.washington.edu/imap/">
+ <!ENTITY url.imap.book "http://www.oreilly.com/catalog/mimap/noframes.html">
++<!ENTITY url.idn.verisign "http://www.verisigh-grs.com/idn/sdk.html">
++<!ENTITY url.idn.jpnic "http://www.nic.ad.jp/ja/idn/idnkit/download/">
++<!ENTITY url.idn.idn.python "http://www.python.org/dev/doc/devel/lib/module-encodings.idna.html">
++<!ENTITY url.idn.ibm.icu "http://oss.software.ibm.com/icu/">
++<!ENTITY url.idn.imc.idna.pl "http://www.imc.org/idna/">
++<!ENTITY url.idn.gnu "ftp://alpha.gnu.org/pub/gnu/libidn/">
++<!ENTITY url.idn.josefsson "http://josefsson.org/libidn/releases/">
+ <!ENTITY url.infozip "http://www.info-zip.org/pub/infozip/">
+ <!ENTITY url.installkits "http://www.hotscripts.com/PHP/Software_and_Servers/Installation_Kits/">
+ <!ENTITY url.instantasp "http://www.stryon.com/products.asp?s=1">
