@@ -18,7 +18,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.17 2003-11-11 12:43:43 turbo Exp $ */
+/* $Id: idn.c,v 0.18 2003-11-11 13:19:47 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -174,7 +174,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.17 2003-11-11 12:43:43 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.18 2003-11-11 13:19:47 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -342,10 +342,11 @@ static char *idn(char *input, int rule)
 			}
 
 			q = stringprep_utf8_to_ucs4(tmpstring, -1, NULL);
-			free(tmpstring);
 			if(!q) {
 				/* Could not convert from UCS-4 to UTF-8 */
 				php_error(E_ERROR, "IDN_IDNA_TO_ASCII: Could not convert from UCS-4 to UTF-8");
+
+				free(tmpstring);
 				return(NULL);
 			}
 
@@ -371,35 +372,31 @@ static char *idn(char *input, int rule)
 			}
 
 			q = stringprep_utf8_to_ucs4(tmpstring, -1, NULL);
-			free(tmpstring);
 			if(!q) {
 				/* Could not convert from UCS-4 to UTF-8 */
 				php_error(E_ERROR, "IDN_IDNA_TO_UNICODE: Could not convert from UCS-4 to UTF-8");
+
+				free(tmpstring);
 				return(NULL);
 			}
+			free(q);
 
 			rc = idna_to_unicode_8z4z(tmpstring, &q,
 									  (IDNG(allow_unassigned_chars) ? IDNA_ALLOW_UNASSIGNED : 0) |
 									  (IDNG(use_std_3_ascii_rules) ? IDNA_USE_STD3_ASCII_RULES : 0));
+			free(tmpstring);
 			if(rc != IDNA_SUCCESS) {
 				/* Could not convert from IDNA to unicode */
 				php_error(E_ERROR, "IDN_IDNA_TO_UNICODE: Could not convert from IDNA to unicode");
 				return(NULL);
 			}
 
-			tmpstring = stringprep_ucs4_to_utf8(q, -1, NULL, NULL);
-			free(q);
-			if(!tmpstring) {
+			output = stringprep_ucs4_to_utf8(q, -1, NULL, NULL);
+			if(!output) {
 				/* Could not convert from UCS-4 to UTF-8 */
 				php_error(E_ERROR, "IDN_IDNA_TO_UNICODE: Could not convert from UCS-4 to UTF-8");
-				return(NULL);
-			}
 
-			output = stringprep_utf8_to_locale(tmpstring);
-			free(tmpstring);
-			if(!output) {
-				/* Could not convert from UTF-8 to locale */
-				php_error(E_ERROR, "IDN_IDNA_TO_UNICODE: Could not convert from UTF-8 to %s", stringprep_locale_charset());
+				free(q);
 				return(NULL);
 			}
 			break;
