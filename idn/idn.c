@@ -24,7 +24,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.30 2004-05-25 15:01:38 turbo Exp $ */
+/* $Id: idn.c,v 0.31 2004-12-18 15:38:43 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -159,8 +159,16 @@ static void php_idn_init_globals(zend_idn_globals *idn_globals)
 /* {{{ PHP_INI_BEGIN
  */
 PHP_INI_BEGIN()
-  STD_PHP_INI_ENTRY("idn.allow_unassigned_chars",	"0",			PHP_INI_ALL, OnUpdateInt,		allow_unassigned_chars,	zend_idn_globals,	idn_globals)
-  STD_PHP_INI_ENTRY("idn.use_std_3_ascii_rules",	"0",			PHP_INI_ALL, OnUpdateInt,		use_std_3_ascii_rules,	zend_idn_globals,	idn_globals)
+#ifndef ZEND_ENGINE_2
+  /* PHP4 */
+  STD_PHP_INI_ENTRY("idn.allow_unassigned_chars",	"0",			PHP_INI_ALL, OnUpdateInt,		allow_unassigned_chars, zend_idn_globals,	idn_globals)
+  STD_PHP_INI_ENTRY("idn.use_std_3_ascii_rules",	"0",			PHP_INI_ALL, OnUpdateInt,		use_std_3_ascii_rules,  zend_idn_globals,	idn_globals)
+#else
+  /* PHP5 */
+  STD_PHP_INI_ENTRY("idn.allow_unassigned_chars",	"0",			PHP_INI_ALL, OnUpdateLong,		allow_unassigned_chars,	zend_idn_globals,	idn_globals)
+  STD_PHP_INI_ENTRY("idn.use_std_3_ascii_rules",	"0",			PHP_INI_ALL, OnUpdateLong,		use_std_3_ascii_rules,	zend_idn_globals,	idn_globals)
+#endif
+
   STD_PHP_INI_ENTRY("idn.default_charset",			"ISO-8859-1",	PHP_INI_ALL, OnUpdateString,	default_charset,		zend_idn_globals,	idn_globals)
 PHP_INI_END()
 /* }}} */
@@ -194,7 +202,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.30 2004-05-25 15:01:38 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.31 2004-12-18 15:38:43 turbo Exp $" );
 	php_info_print_table_row(2, "LibIDN version", STRINGPREP_VERSION);
 	php_info_print_table_end();
 	DISPLAY_INI_ENTRIES();
