@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- $Revision: 1.1 $ -->
+<!-- $Revision: 1.2 $ -->
  <reference id="ref.idn">
   <title>IDN functions</title>
   <titleabbrev>IDN</titleabbrev>
@@ -13,27 +13,27 @@
     <itemizedlist>
      <listitem>
       <para>
-       <ulink url="&url.verisign.idna;">VeriSign IDN SDK</ulink>
+       <ulink url="&url.idn.verisign;">VeriSign IDN SDK</ulink>
       </para>
      </listitem>
      <listitem>
       <para>
-       <ulink url="&url.jpnic.idna;">JPNIC idnkit</ulink>
+       <ulink url="&url.idn.jpnic;">JPNIC idnkit</ulink>
       </para>
      </listitem>
      <listitem>
       <para>
-       <ulink url="&url.python.idna;">Python IDNA</ulink>
+       <ulink url="&url.idn.python;">Python IDNA</ulink>
       </para>
      </listitem>
      <listitem>
       <para>
-       <ulink url="&url.ibm.icu.idna;">IBM ICU</ulink>
+       <ulink url="&url.idn.ibm.icu;">IBM ICU</ulink>
       </para>
      </listitem>
      <listitem>
       <para>
-       <ulink url="&url.imc.idna.pl;">IMC idna.pl</ulink>
+       <ulink url="&url.idn.imc.idna.pl;">IMC idna.pl</ulink>
       </para>
      </listitem>
     </itemizedlist>
@@ -43,7 +43,7 @@
     &reftitle.required;
     <para>
      You will need to get and compile the IDN libraries from
-     either <ulink url="&url.gnu.idna;">GNU IDN Library 
+     either <ulink url="&url.idn.gnu;">GNU IDN Library 
      </ulink> or <ulink url="&url.idn.josefsson;">
      Simon Josefsson</ulink> to compile PHP with IDN support.
     </para>
@@ -95,7 +95,7 @@ echo idn_unicode_to_ascii('räksmörgås.josefßon.org', 'ISO-8859-1');
    </section>
   </partintro>
 
-  &reference.ldap.functions;
+  &reference.idn.functions;
  </reference>
 
 <!-- Keep this comment at the end of the file
