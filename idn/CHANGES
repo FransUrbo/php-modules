@@ -1,0 +1,22 @@
+PHP IDN 1.0 - Wed May 26 2004
+	- Support TLD checking (patch by Thomas Jacob - see THANX_TO).
+	  Functions:	tld_check_8z()
+			tld_get()
+			tld_get_table()
+	- Show version of LibIDN and configuration values
+	  when dumping info.
+	- Lots of small bugfixes that solves the memory problem
+	  by Thomas Jacob (see THANX_TO).
+	  + Remove idn_charset(). Don't longer support the
+	    CHARSET environment variable. Include this value
+	    as a parameter to functions instead.
+	  + Using wrong variables in stringprep_profile().
+	    I used the output variable when the tempstring
+	    was to be used!
+	  + malloc() memory before using the output variable
+	    (where we're putting the end result).
+	  + Reimplementation of idn_to_unicode()
+	- More dynamic build environment. Better support for
+	  both Debian GNU/Linux stable as well as unstable.
+	- Cleanup and rewrite of example PHP page
+	  (the 'show {code,versions,functions}' stuff).
