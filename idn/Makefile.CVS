@@ -34,7 +34,7 @@ tag:
 	  cvs tag -RF $$TAG; \
 	)
 
-install: $(INSTDIR)
+install: $(INSTDIR) clean
 	@(echo -n "Instdir:   $(INSTDIR): "; find | cpio -p $(INSTDIR))
 
 tarball: install
