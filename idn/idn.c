@@ -18,7 +18,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.16 2003-11-10 17:51:13 turbo Exp $ */
+/* $Id: idn.c,v 0.17 2003-11-11 12:43:43 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -129,7 +129,8 @@ static void php_idn_init_globals(zend_idn_globals *idn_globals)
 {
     idn_globals->allow_unassigned_chars = 0;
 	idn_globals->use_std_3_ascii_rules = 0;
-	strcpy(idn_globals->default_charset, "ISO-8859-1");
+
+	idn_globals->default_charset = estrdup("ISO-8859-1");
 }
 /* }}} */
 
@@ -173,7 +174,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.16 2003-11-10 17:51:13 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.17 2003-11-11 12:43:43 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -431,7 +432,8 @@ PHP_FUNCTION(idn_prep_name)
 	if(argv == 2) {
 		convert_to_string_ex(yycharset);
 		idn_charset((*yycharset)->value.str.val);
-	}
+	} else
+		idn_charset(NULL);
 
 	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_NAME);
 	RETVAL_STRINGL(output, strlen(output), 1);
@@ -455,7 +457,8 @@ PHP_FUNCTION(idn_prep_kerberos5)
 	if(argv == 2) {
 		convert_to_string_ex(yycharset);
 		idn_charset((*yycharset)->value.str.val);
-	}
+	} else
+		idn_charset(NULL);
 
 	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_KRB);
 	RETVAL_STRINGL(output, strlen(output), 1);
@@ -479,7 +482,8 @@ PHP_FUNCTION(idn_prep_node)
 	if(argv == 2) {
 		convert_to_string_ex(yycharset);
 		idn_charset((*yycharset)->value.str.val);
-	}
+	} else
+		idn_charset(NULL);
 
 	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_NODE);
 	RETVAL_STRINGL(output, strlen(output), 1);
@@ -503,7 +507,8 @@ PHP_FUNCTION(idn_prep_resource)
 	if(argv == 2) {
 		convert_to_string_ex(yycharset);
 		idn_charset((*yycharset)->value.str.val);
-	}
+	} else
+		idn_charset(NULL);
 
 	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_RESOURCE);
 	RETVAL_STRINGL(output, strlen(output), 1);
@@ -527,7 +532,8 @@ PHP_FUNCTION(idn_prep_plain)
 	if(argv == 2) {
 		convert_to_string_ex(yycharset);
 		idn_charset((*yycharset)->value.str.val);
-	}
+	} else
+		idn_charset(NULL);
 
 	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_PLAIN);
 	RETVAL_STRINGL(output, strlen(output), 1);
@@ -551,7 +557,8 @@ PHP_FUNCTION(idn_prep_trace)
 	if(argv == 2) {
 		convert_to_string_ex(yycharset);
 		idn_charset((*yycharset)->value.str.val);
-	}
+	} else
+		idn_charset(NULL);
 
 	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_TRACE);
 	RETVAL_STRINGL(output, strlen(output), 1);
@@ -575,7 +582,8 @@ PHP_FUNCTION(idn_prep_sasl)
 	if(argv == 2) {
 		convert_to_string_ex(yycharset);
 		idn_charset((*yycharset)->value.str.val);
-	}
+	} else
+		idn_charset(NULL);
 
 	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_SASL);
 	RETVAL_STRINGL(output, strlen(output), 1);
@@ -599,7 +607,8 @@ PHP_FUNCTION(idn_prep_iscsi)
 	if(argv == 2) {
 		convert_to_string_ex(yycharset);
 		idn_charset((*yycharset)->value.str.val);
-	}
+	} else
+		idn_charset(NULL);
 
 	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_ISCSI);
 	RETVAL_STRINGL(output, strlen(output), 1);
@@ -627,7 +636,8 @@ PHP_FUNCTION(idn_punycode_encode)
 	if(argv == 2) {
 		convert_to_string_ex(yycharset);
 		idn_charset((*yycharset)->value.str.val);
-	}
+	} else
+		idn_charset(NULL);
 
 	output = idn((*yyinput)->value.str.val, IDN_PUNYCODE_ENCODE);
 	RETVAL_STRINGL(output, strlen(output), 1);
@@ -651,7 +661,8 @@ PHP_FUNCTION(idn_punycode_decode)
 	if(argv == 2) {
 		convert_to_string_ex(yycharset);
 		idn_charset((*yycharset)->value.str.val);
-	}
+	} else
+		idn_charset(NULL);
 
 	output = idn((*yyinput)->value.str.val, IDN_PUNYCODE_DECODE);
 	RETVAL_STRINGL(output, strlen(output), 1);
@@ -679,7 +690,8 @@ PHP_FUNCTION(idn_to_ascii)
 	if(argv == 2) {
 		convert_to_string_ex(yycharset);
 		idn_charset((*yycharset)->value.str.val);
-	}
+	} else
+		idn_charset(NULL);
 
 	output = idn((*yyinput)->value.str.val, IDN_IDNA_TO_ASCII);
 	RETVAL_STRINGL(output, strlen(output), 1);
@@ -703,7 +715,8 @@ PHP_FUNCTION(idn_to_unicode)
 	if(argv == 2) {
 		convert_to_string_ex(yycharset);
 		idn_charset((*yycharset)->value.str.val);
-	}
+	} else
+		idn_charset(NULL);
 
 	output = idn((*yyinput)->value.str.val, IDN_IDNA_TO_UNICODE);
 	RETVAL_STRINGL(output, strlen(output), 1);

@@ -57,7 +57,7 @@ PHP_FUNCTION(idn_to_unicode);
 ZEND_BEGIN_MODULE_GLOBALS(idn)
 	 int allow_unassigned_chars;	/* 0 */
 	 int use_std_3_ascii_rules;		/* 0 */
-	 char default_charset[30];		/* ISO-8859-1 */
+	 char *default_charset;		/* ISO-8859-1 */
 ZEND_END_MODULE_GLOBALS(idn)
 
 #ifdef ZTS
