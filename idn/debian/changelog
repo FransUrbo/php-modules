@@ -1,3 +1,9 @@
+php4-idn (0.8-1) unstable; urgency=low
+
+  * New upstream release. Memory leaks fixed
+
+ -- Turbo Fredriksson <turbo@debian.org>  Fri, 30 Jan 2004 07:58:09 +0100
+
 php4-idn (0.7-1) unstable; urgency=low
 
   * Initial Release.
