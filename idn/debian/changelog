@@ -1,3 +1,13 @@
+php4-idn (1.1-1) unstable; urgency=low
+
+  * New upstream version:
+    - Support building on PHP.
+    - Missing PHP parser code added in idn.php.
+    - Small updates to README.documentation on how to build reference
+      documentation correctly.
+
+ -- Turbo Fredriksson <turbo@debian.org>  Sat, 18 Dec 2004 16:50:54 +0100
+
 php4-idn (1.0-3) unstable; urgency=low
 
   * Add 'cli' to the list of php4 'modules' to add/remove the IDN
