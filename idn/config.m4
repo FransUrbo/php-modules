@@ -1,4 +1,4 @@
-dnl $Id: config.m4,v 0.1 2003-11-07 18:31:08 turbo Exp $
+dnl $Id: config.m4,v 0.2 2004-01-11 08:46:13 turbo Exp $
 dnl config.m4 for extension idn
 
 PHP_ARG_WITH(idn,whether to include IDN support,
@@ -15,16 +15,16 @@ if test "$PHP_IDN" != "no"; then
   done
 
   if test -z "$IDN_DIR"; then
-    AC_MSG_ERROR(Cannot find libidn)
+    AC_MSG_ERROR([Cannot find libidn])
   fi
 
   IDN_INCDIR=$IDN_DIR/include
   IDN_LIBDIR=$IDN_DIR/lib
 
-  PHP_TEMP_LDFLAGS(-L$IDN_LIBDIR,[
-  AC_CHECK_LIB(idn, idna_to_unicode_8z4z, [AC_DEFINE(HAVE_IDN,1,[ ])],
-    [AC_MSG_ERROR(broken libidn)])
-  ])
+  AC_CHECK_LIB(idn,
+	       idna_to_unicode_8z4z,
+	       [AC_DEFINE(HAVE_IDN,1,[ ])],
+	       [AC_MSG_ERROR([broken libidn])])
 
   PHP_SUBST(IDN_SHARED_LIBADD)
 
