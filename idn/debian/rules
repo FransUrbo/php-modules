@@ -16,6 +16,11 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	INSTALL_PROGRAM += -s
 endif
 
+# Find PHP4 API version - this should probably used in
+php4devver=$(shell dpkg -s php4-dev | grep ^Version | cut -d\  -f2)
+zendapiver=$(shell egrep '\#define ZEND_MODULE_API_NO ' /usr/include/php4/Zend/zend_modules.h|sed 's/\#define ZEND_MODULE_API_NO //')
+phpapiver=$(shell grep '\#define PHP_API_VERSION ' /usr/include/php4/main/php.h |sed 's/\#define PHP_API_VERSION //')
+
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
@@ -48,7 +53,12 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
-	install -m755 modules/idn.so debian/php4-idn/usr/lib/php4/20010901/idn.so
+	(ext=`/usr/bin/php-config --extension-dir`; \
+	 mkdir -p debian/php4-idn/$${ext}; \
+	 install -m 644 -o root -g root  modules/idn.so debian/php4-idn/$${ext}/idn.so)
+
+	mkdir -p debian/php4-idn/usr/share/lintian/overrides
+	echo "php4-idn: no-shlibs-control-file $$ext/idn.so" > debian/php4-idn/usr/share/lintian/overrides/php4-idn
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -70,6 +80,10 @@ binary-arch: build install
 
 	dh_installdeb
 	dh_shlibdeps
+
+	echo "php:Depends=phpapi-$(phpapiver)" >> debian/php4-idn.substvars
+	#(This'll be zendapi-$(zendapiver) on Woody)
+
 	dh_gencontrol
 	dh_md5sums
 
