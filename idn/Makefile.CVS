@@ -62,6 +62,9 @@ release: tag tarball debian
 		> /var/www/php-modules/idn/index.html.out; \
 	  mv /var/www/php-modules/idn/index.html.out /var/www/php-modules/idn/index.html; \
 	  cp -v $(DESTDIR)/../*.deb /var/www/php-modules/idn/; \
+	  rm /var/www/php-modules/idn/src/*; \
+	  cp $(DESTDIR)/../php4-idn_*.dsc $(DESTDIR)/../php4-idn_*.tar.gz \
+		$(DESTDIR)/../php4-idn_*.changes /var/www/php-modules/idn/src/; \
 	  rm .tag)
 
 $(INSTDIR):
