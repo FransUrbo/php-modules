@@ -28,13 +28,15 @@
 
 ZEND_DECLARE_MODULE_GLOBALS(idn)
 
+#ifdef COMPILE_DL_IDN
+ZEND_GET_MODULE(idn)
+#endif
+
 /* {{{ idn_functions[]
  *
  * Every user visible function must have an entry in idn_functions[].
  */
 function_entry idn_functions[] = {
-	PHP_FE(confirm_idn_compiled,				NULL)		/* For testing, remove later. */
-
 	PHP_FE(idna_to_ascii,						NULL)
 	PHP_FE(idna_to_ascii_from_locale,			NULL)
 	PHP_FE(idna_to_ascii_from_ucs4,				NULL)
@@ -66,10 +68,6 @@ zend_module_entry idn_module_entry = {
 	STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
-
-#ifdef COMPILE_DL_IDN
-ZEND_GET_MODULE(idn)
-#endif
 
 /* {{{ PHP_INI_BEGIN
  */
@@ -116,47 +114,34 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.0 2003-10-29 14:18:24 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.1 2003-10-30 06:22:35 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
-
-
-/* Remove the following function when you have succesfully modified config.m4
-   so that your module can be compiled into PHP, it exists only for testing
-   purposes. */
-
-/* {{{ proto string confirm_idn_compiled(string arg)
-   Return a string to confirm that the module is compiled in */
-PHP_FUNCTION(confirm_idn_compiled)
-{
-	char *arg = NULL;
-	int arg_len, len;
-	char string[256];
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &arg, &arg_len) == FAILURE) {
-		return;
-	}
-
-	len = sprintf(string, "Congratulations! You have successfully modified ext/%.78s/config.m4. Module %.78s is now compiled into PHP.", "idn", arg);
-	RETURN_STRINGL(string, len, 1);
-}
-/* }}} */
-
 
 /* {{{ idna_to_ascii(input)
  */
 PHP_FUNCTION(idna_to_ascii)
 {
-	char output[256];
-	int len;
+	unsigned long *input;
+	char *output;
+	int rc, argc;
+	size_t outlen;
 
-	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &link) == FAILURE) {
+    argc = ZEND_NUM_ARGS();
+    if (argc != 1 || zend_get_parameters_ex(argc, &input) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 
-	len = strlen(output);
-	RETURN_STRINGL(output, len, 1);
+	outlen = 63 - strlen (IDNA_ACE_PREFIX);
+	output[strlen (IDNA_ACE_PREFIX) + outlen] = '\0';
+
+	rc = idna_to_ascii (input, outlen, output,
+						IDNG(allowunassigned), IDNG(usestd3asciirules));
+	if (rc != IDNA_SUCCESS)
+		RETURN_FALSE;
+
+	RETURN_STRING(output, 1);
 }
 /* }}} */
 
@@ -291,11 +276,11 @@ PHP_FUNCTION(idna_to_unicode_locale_from_utf8)
 /* }}} */
 
 /* {{{ idna_to_unicode_locale_from_locale(input)
- * 
+ */
 PHP_FUNCTION(idna_to_unicode_locale_from_locale)
 {
-char output[256];
-int len;
+	char output[256];
+	int len;
 
 	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &link) == FAILURE) {
 		WRONG_PARAM_COUNT;
