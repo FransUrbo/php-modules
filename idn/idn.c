@@ -17,7 +17,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.10 2003-11-07 15:05:04 turbo Exp $ */
+/* $Id: idn.c,v 0.11 2003-11-07 18:00:41 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -161,7 +161,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.10 2003-11-07 15:05:04 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.11 2003-11-07 18:00:41 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -355,7 +355,7 @@ static char *idn(char *input, int rule)
  */
 PHP_FUNCTION(idn_allow_unassigned)
 {
-	int c;
+	pval **c;
 
 	switch(ZEND_NUM_ARGS()) {
 		case 0:
@@ -370,8 +370,9 @@ PHP_FUNCTION(idn_allow_unassigned)
 			if(zend_get_parameters_ex(1, &c) == FAILURE) {
 				RETURN_FALSE;
 			}
+			convert_to_long_ex(c);
 
-			IDNG(allowunassigned) = c;
+			IDNG(allowunassigned) = (*c)->value.lval;
 			break;
 	}
 
@@ -384,7 +385,7 @@ PHP_FUNCTION(idn_allow_unassigned)
  */
 PHP_FUNCTION(idn_use_std3_ascii_rules)
 {
-	int c;
+	pval **c;
 
 	switch(ZEND_NUM_ARGS()) {
 		case 0:
@@ -399,8 +400,9 @@ PHP_FUNCTION(idn_use_std3_ascii_rules)
 			if(zend_get_parameters_ex(1, &c) == FAILURE) {
 				RETURN_FALSE;
 			}
-
-			IDNG(usestd3asciirules) = c;
+			convert_to_long_ex(c);
+			
+			IDNG(usestd3asciirules) = (*c)->value.lval;
 			break;
 	}
 
@@ -425,6 +427,8 @@ PHP_FUNCTION(idn_get_use_std3_ascii_rules)
 	RETURN_BOOL(IDNG(usestd3asciirules));
 }
 /* }}} */
+
+/* --------------------- */
 
 /* {{{ proto string idn_stringprep(string input)
  */
@@ -499,6 +503,7 @@ PHP_FUNCTION(idn_unicode_to_ascii)
 /* }}} */
 
 /* {{{ proto string idn_ascii_to_unicode(string input)
+
  */
 PHP_FUNCTION(idn_ascii_to_unicode)
 {
@@ -514,6 +519,7 @@ PHP_FUNCTION(idn_ascii_to_unicode)
 	output = idn(input, IDN_IDNA_TO_UNICODE);
 	RETURN_STRING(output, 1);
 }
+
 /* }}} */
 
 /* --------------------- */
