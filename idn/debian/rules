@@ -19,7 +19,7 @@ endif
 # Find PHP4 API version - this should probably used in
 php4devver=$(shell dpkg -s php4-dev | grep ^Version | cut -d\  -f2)
 zendapiver=$(shell egrep '\#define ZEND_MODULE_API_NO ' /usr/include/php4/Zend/zend_modules.h|sed 's/\#define ZEND_MODULE_API_NO //')
-phpapiver=$(shell grep '\#define PHP_API_VERSION ' /usr/include/php4/main/php.h |sed 's/\#define PHP_API_VERSION //')
+phpapiver=$(shell grep '\#define PHP_API_VERSION ' /usr/include/php4/main/php.h |sed 's/\#define PHP_API_VERSION //')-zts
 
 configure: configure-stamp
 configure-stamp:

@@ -1,3 +1,14 @@
+php4-idn (1.1-2) unstable; urgency=low
+
+  * Merging NMU by Adam Conrad <adconrad@0c3.net>:
+    - Bump php4-dev build-dep to (>= 4:4.3.10-3)
+    - Make sure we depend on a threaded phpapi (closes: #293999)
+    - Remove debian/dirs, as it's creating an extra unused directory
+      under /usr/lib/php4
+    - Add support in postinst/prerm for the apache2 and caudium SAPIs
+
+ -- Turbo Fredriksson <turbo@debian.org>  Mon, 14 Mar 2005 11:36:36 +0100
+
 php4-idn (1.1-1) unstable; urgency=low
 
   * New upstream version:

@@ -2,7 +2,7 @@ Source: php4-idn
 Section: web
 Priority: optional
 Maintainer: Turbo Fredriksson <turbo@debian.org>
-Build-Depends: debhelper (>> 4.0.0), binutils, php4-dev (>= 4.3 ), libidn11-dev | libidn9-dev (>= 0.2.1)
+Build-Depends: debhelper (>> 4.0.0), binutils, php4-dev (>= 4:4.3.10-3), libidn11-dev | libidn9-dev (>= 0.2.1)
 Standards-Version: 3.5.8
 
 Package: php4-idn
