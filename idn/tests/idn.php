@@ -1,4 +1,4 @@
-<?php /* $Id: idn.php,v 1.3 2003-11-08 06:45:43 turbo Exp $ */ ?>
+<?php /* $Id: idn.php,v 1.4 2003-11-08 11:32:36 turbo Exp $ */ ?>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -32,16 +32,35 @@ if(function_exists("idn_ascii_to_unicode") && function_exists("idn_unicode_to_as
 	//pql_execute("env", false);
 	
 	// Convert the value
-	if($rule == IDN_IDNA_TO_ASCII)
-	  $domain_out = idn_unicode_to_ascii($domain);
-	elseif($rule == IDN_IDNA_TO_UNICODE)
-	  $domain_out = idn_ascii_to_unicode($domain);
-	elseif($rule == IDN_PUNYCODE_ENCODE)
-	  $domain_out = idn_punycode_encode($domain);
-	elseif($rule == IDN_PUNYCODE_DECODE)
-	  $domain_out = idn_punycode_decode($domain);
-	else
-	  die("Non supported conversion '$rule'");
+	if($form) {
+	  if($rule == 'name')
+	    $domain_out = idn_prep_name($domain);
+	  elseif($rule == 'krb')
+	    $domain_out = idn_prep_kerberos5($domain);
+	  elseif($rule == 'node')
+	    $domain_out = idn_prep_node($domain);
+	  elseif($rule == 'resource')
+	    $domain_out = idn_prep_resource($domain);
+	  elseif($rule == 'plain')
+	    $domain_out = idn_prep_plain($domain);
+	  elseif($rule == 'trace')
+	    $domain_out = idn_prep_trace($domain);
+	  elseif($rule == 'sasl')
+	    $domain_out = idn_prep_sasl($domain);
+	  elseif($rule == 'iscsi')
+	    $domain_out = idn_prep_iscsi($domain);
+	} else {
+	  if($rule == 'unicode2ascii')
+	    $domain_out = idn_unicode_to_ascii($domain);
+	  elseif($rule == 'ascii2unicode')
+	    $domain_out = idn_ascii_to_unicode($domain);
+	  elseif($rule == 'punyencode')
+	    $domain_out = idn_punycode_encode($domain);
+	  elseif($rule == 'punydecode')
+	    $domain_out = idn_punycode_decode($domain);
+	  else
+	    die("Non supported conversion '$rule'");
+	}
 
 	// Output the result (could contain the error message)
 	echo "$domain: '$domain_out'<br>";
@@ -51,10 +70,26 @@ if(function_exists("idn_ascii_to_unicode") && function_exists("idn_unicode_to_as
     <form action="<?=$PHP_SELF?>" method="post">
       <input type="text" name="domain" value="<?=$domain?>" size="30">
       <select name="rule">
-        <option value="<?=IDN_IDNA_TO_ASCII?>">UNICODE 2 ASCII</option>
-        <option value="<?=IDN_IDNA_TO_UNICODE?>">ASCII 2 UNICODE</option>
-	<option value="<?=IDN_PUNYCODE_ENCODE?>">PUNYCODE ENCODE</option>
-	<option value="<?=IDN_PUNYCODE_DECODE?>">PUNYCODE DECODE</option>
+        <option value="unicode2ascii">UNICODE 2 ASCII</option>
+        <option value="ascii2unicode">ASCII 2 UNICODE</option>
+	<option value="punyencode">PUNYCODE ENCODE</option>
+	<option value="punydecode">PUNYCODE DECODE</option>
+      </select>
+      <input type="submit" value="Convert">
+    </form>
+
+    <form action="<?=$PHP_SELF?>" method="post">
+      <input type="text" name="domain" value="<?=$domain?>" size="30">
+      <input type="hidden" name="form" value="stringprep">
+      <select name="rule">
+	<option value="name">Nameprep</option>
+	<option value="krb">KRBprep</option>
+	<option value="node">Nodeprep</option>
+	<option value="resource">Resourceprep</option>
+	<option value="plain">Plain</option>
+	<option value="trace">Trace</option>
+	<option value="sasl">SASLprep</option>
+	<option value="iscsi">ISCSIprep</option>
       </select>
       <input type="submit" value="Convert">
     </form>
