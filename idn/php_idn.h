@@ -61,11 +61,31 @@ PHP_FUNCTION(idn_punycode_decode);
 PHP_FUNCTION(idn_to_ascii);
 PHP_FUNCTION(idn_to_utf8);
 
+/* Global variables (toggles etc) */
 ZEND_BEGIN_MODULE_GLOBALS(idn)
 	 int allow_unassigned_chars;	/* 0 */
 	 int use_std_3_ascii_rules;		/* 0 */
 	 char *default_charset;		/* ISO-8859-1 */
 ZEND_END_MODULE_GLOBALS(idn)
+
+/* Error codes */
+#define IDNA_SUCCESS				0
+#define IDNA_STRINGPREP_ERROR		1
+#define IDNA_PUNYCODE_ERROR			2
+#define IDNA_CONTAINS_LDH			3
+#define IDNA_CONTAINS_MINUS			4
+#define IDNA_INVALID_LENGTH			5
+#define IDNA_NO_ACE_PREFIX			6
+#define IDNA_ROUNDTRIP_VERIFY_ERROR 7
+#define IDNA_CONTAINS_ACE_PREFIX	8
+#define IDNA_ICONV_ERROR			9
+
+/* Internal errors. */
+#define IDNA_MALLOC_ERROR		  	201
+
+/* IDNA flags */
+#define IDNA_ALLOW_UNASSIGNED		0x0001
+#define IDNA_USE_STD3_ASCII_RULES	0x0002
 
 #ifdef ZTS
 # define IDNG(v) TSRMG(idn_globals_id, zend_idn_globals *, v)
