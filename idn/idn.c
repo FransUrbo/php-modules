@@ -139,7 +139,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.5 2003-11-06 13:59:54 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.6 2003-11-06 14:04:48 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -246,14 +246,8 @@ PHP_FUNCTION(idn)
 	switch(rule) {
 		/* idn -s */
 		case IDN_STRINGPREP:
-			output = stringprep_locale_to_utf8(input);
-			if(!output) {
-				/* Could not convert from locale to UTF-8 */
-				RETURN_STRING("IDN_STRINGPREP: Could not convert from locale to UTF-8", 1);
-			}			
-			
 			/* TODO: Third param! */
-			rc = stringprep_profile(output, &tmpstring, "Nameprep", 0);
+			rc = stringprep_profile(input, &tmpstring, "Nameprep", 0);
 			if(rc != STRINGPREP_OK) {
 				RETURN_LONG((long)rc);
 			}
@@ -267,13 +261,7 @@ PHP_FUNCTION(idn)
 								
 		/* idn -e */
 		case IDN_PUNYCODE_ENCODE:
-			output = stringprep_locale_to_utf8(input);
-			if(!output) {
-				/* Could not convert from locale to UTF-8 */
-				RETURN_STRING("IDN_PUNYCODE_ENCODE: Could not convert from locale to UTF-8", 1);
-			}			
-
-			q = stringprep_utf8_to_ucs4(output, -1, &len);
+			q = stringprep_utf8_to_ucs4(input, -1, &len);
 			if(!q) {
 				/* Could not convert from UTF-8 to UCS-4 */
 				RETURN_STRING("IDN_PUNYCODE_ENCODE: Could not convert from UTF-8 to UCS-4", 1);
