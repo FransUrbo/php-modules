@@ -1,0 +1,51 @@
+#!/bin/sh
+# postinst script for php4-idn
+
+set -e
+
+#DEBHELPER#
+
+if [ "$1" != "configure" ]; then
+    exit 0
+fi
+
+if [ -n "$2" ]; then
+    # we're upgrading. don't ask again
+    exit 0
+fi
+
+if [ -f /etc/php4/apache/php.ini ]; then
+    if ! grep -q "^[[:space:]]*extension[[:space:]]*=[[:space:]]*idn.so" /etc/php4/apache/php.ini; then
+	echo "You are installing IDN support for php4, but it's not"
+	echo "enabled in your /etc/php4/apache/php.ini."
+	echo
+	echo "To enable it you need to add this line:"
+	echo
+	echo "extension=idn.so"
+	echo
+	echo -n "Do you want me to add it now [Y/n] ?"
+	read a
+	if ! echo $a | grep -iq ^n; then
+	    echo "extension=idn.so" >> /etc/php4/apache/php.ini
+	fi
+	fi
+fi
+
+if [ -f /etc/php4/cgi/php.ini ]; then
+    if ! grep -q "^[[:space:]]*extension[[:space:]]*=[[:space:]]*idn.so" /etc/php4/cgi/php.ini; then
+	echo "You are installing IDN support for php4, but it's not"
+	echo "enabled in your /etc/php4/cgi/php.ini."
+	echo
+	echo "To enable it you need to add this line:"
+	echo
+	echo "extension=idn.so"
+	echo
+	echo -n "Do you want me to add it now [Y/n] ?"
+	read a
+	if ! echo $a | grep -iq ^n; then
+	    echo "extension=idn.so" >> /etc/php4/cgi/php.ini
+	fi
+    fi
+fi
+
+exit 0
