@@ -1,4 +1,4 @@
-<?
+<?php
 if(!extension_loaded('idn')) {
 	dl('idn.so');
 }
