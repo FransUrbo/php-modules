@@ -8,3 +8,5 @@ Thomas Jacob
 	* Misc buffer size (memory leak) fixes.
 	* Slight rewrite of idn_idna_to_ascii() and idn_unicode_to_ascii()
 	  - Shortened by usage of other LibIDN functions.
+	* Make sure PHP-IDN return PHP warnings instead of errors when
+	  something bad happens (application must deal with warning manually).
