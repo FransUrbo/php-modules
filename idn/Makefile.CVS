@@ -1,0 +1,68 @@
+# Nothing for you here! This is simply for me, so that I'll can do some
+# general CVS stuff easily.
+#
+
+DATE    := $(shell date +"%b %e %Y")
+TMPDIR  := $(shell tempfile)
+VERSION := $(shell cat .version | sed 's@\ .*@@')
+INSTDIR := $(TMPDIR)/idn-$(VERSION)
+DESTDIR := $(TMPDIR)/php4-idn-$(VERSION)
+
+# Make a unified diff over the changes from the last version...
+diff:
+	@(VERSION=`cat .version.old`; \
+	  MAJOR=`expr substr $$VERSION 1 1`; \
+	  MINOR=`expr substr $$VERSION 3 2`; \
+	  TAG="REL_`echo $$MAJOR`_`echo $$MINOR`"; \
+	  echo cvs rdiff: $$TAG; \
+	  cvs rdiff -ur $$TAG idn; \
+	)
+
+tag:
+	@(VERSION=`cat .version | sed 's@ .*@@'`; \
+	  MAJOR=`expr substr $$VERSION 1 1`; \
+	  MINOR=`expr substr $$VERSION 3 2`; \
+	  OLDLV=`expr $$MINOR - 1`; \
+	  echo "$$MAJOR.$$OLDLV" > .version.old; \
+	  echo "$$MAJOR.$$MINOR" > .version; \
+	  echo -n "We are now at version $$MAJOR.$$MINOR"; \
+	  TAG="REL_`echo $$MAJOR`_`echo $$MINOR`"; \
+	  echo -n $(TAG) > .tag; \
+	  echo cvs tag: $$TAG; \
+	  cvs commit -m "New release - $$MAJOR.$$MINOR." \
+		.version .version.old; \
+	  cvs tag -RF $$TAG; \
+	)
+
+install: $(INSTDIR)
+	@(echo -n "Instdir:   $(INSTDIR): "; find | cpio -p $(INSTDIR))
+
+tarball: install
+	@(rm -Rf $(INSTDIR)/cvsMakefile $(INSTDIR)/.version.old; \
+	  cd $(INSTDIR) && find -type d -name CVS -o -name '.cvsignore' -o -name '*~' | \
+		xargs rm -rf; \
+	  echo -n "Tarball 1: $(TMPDIR)/idn-$(VERSION).tar.gz: "; \
+	  cd $(TMPDIR) && tar -cz --exclude=debian -f idn-$(VERSION).tar.gz idn-$(VERSION); \
+	  echo "done."; \
+	  echo -n "Tarball 2: $(TMPDIR)/idn-$(VERSION).tar.bz2: "; \
+	  cd $(TMPDIR) && tar -cj --exclude=debian -f idn-$(VERSION).tar.bz2 idn-$(VERSION); \
+	  echo "done.")
+
+debian: install
+	@(mv $(INSTDIR) $(DESTDIR); \
+	  cd $(DESTDIR); \
+	  debuild; \
+	  echo "Files is in: "$(DESTDIR))
+
+release: tag tarball debian
+	@(mv -v $(TMPDIR)/idn-$(VERSION).tar.gz /var/www/php-modules/idn/; \
+	  mv -v $(TMPDIR)/idn-$(VERSION).tar.bz2 /var/www/php-modules/idn/; \
+	  cat /var/www/php-modules/idn/index.html.in | \
+		sed -e "s@%VERSION%@$(VERSION)@g" -e "s@%CVSTAG%@`cat .tag`@g" \
+		> /var/www/php-modules/idn/index.html.out; \
+	  mv /var/www/php-modules/idn/index.html.out /var/www/php-modules/idn/index.html; \
+	  cp -v $(DESTDIR)/../*.deb /var/www/php-modules/idn/; \
+	  rm .tag)
+
+$(INSTDIR):
+	@rm -f $(TMPDIR) && mkdir -p $(INSTDIR)
