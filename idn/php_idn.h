@@ -27,6 +27,7 @@
 #ifndef PHP_IDN_H
 #define PHP_IDN_H
 
+#include <php_config.h>
 #include <idna.h>
 
 extern zend_module_entry idn_module_entry;
@@ -61,6 +62,12 @@ PHP_FUNCTION(idn_punycode_decode);
 PHP_FUNCTION(idn_to_ascii);
 PHP_FUNCTION(idn_to_utf8);
 PHP_FUNCTION(idn_to_unicode);
+
+#ifdef HAVE_IDN_TLD
+PHP_FUNCTION(tld_check);
+PHP_FUNCTION(tld_get);
+PHP_FUNCTION(tld_get_table);
+#endif
 
 /* Global variables (toggles etc) */
 ZEND_BEGIN_MODULE_GLOBALS(idn)
