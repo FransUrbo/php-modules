@@ -1,4 +1,4 @@
-<?php /* $Id: idn.php,v 1.1 2003-11-06 19:17:13 turbo Exp $ */ ?>
+<?php /* $Id: idn.php,v 1.2 2003-11-07 15:25:41 turbo Exp $ */ ?>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -25,15 +25,21 @@ function pql_execute($command, $hide=true) {
     return $ret;
 }
 
-if(function_exists("idn")) {
+if(function_exists("idn_ascii_to_unicode") && function_exists("idn_unicode_to_ascii")) {
     if($domain) {
 	// Set the locale to UTF-8
 	putenv("CHARSET=ISO-8859-1");
-pql_execute("env", false);
+	//pql_execute("env", false);
 	
 	// Convert the value
-	$domain_out = idn($domain, $rule);
-	
+	if($rule == IDN_IDNA_TO_ASCII)
+	  $domain_out = idn_unicode_to_ascii($domain);
+	elseif($rule == IDN_IDNA_TO_UNICODE)
+	  $domain_out = idn_ascii_to_unicode($domain);
+	else
+	  die("Non supported conversion '$rule'");
+
+	// Output the result (could contain the error message)
 	echo "$domain: '$domain_out'<br>";
 	$domain = $domain_out;
     }
@@ -47,6 +53,8 @@ pql_execute("env", false);
       <input type="submit" value="Convert">
     </form>
 <?php
+} else {
+    die("Module IDN isn't loaded (can't find function idn_ascii_to_unicode and/or idn_unicode_to_ascii)");
 }
 ?>
   </body>
