@@ -35,25 +35,23 @@ extern zend_module_entry idn_module_entry;
 #include "TSRM.h"
 #endif
 
-/* IDN functions */
 PHP_MINIT_FUNCTION(idn);
 PHP_MSHUTDOWN_FUNCTION(idn);
 PHP_MINFO_FUNCTION(idn);
 
-PHP_FUNCTION(confirm_idn_compiled);	/* For testing, remove later. */
-
+/* IDNA2ASCII functions */
 PHP_FUNCTION(idna_to_ascii);
 PHP_FUNCTION(idna_to_ascii_from_locale);
 PHP_FUNCTION(idna_to_ascii_from_ucs4);
 PHP_FUNCTION(idna_to_ascii_from_utf8);
 
+/* IDNA2UNICODE functions */
 PHP_FUNCTION(idna_to_unicode);
 PHP_FUNCTION(idna_to_unicode_locale_from_locale);
 PHP_FUNCTION(idna_to_unicode_locale_from_utf8);
 PHP_FUNCTION(idna_to_unicode_ucs4_from_ucs4);
 PHP_FUNCTION(idna_to_unicode_ucs4_from_utf8);
 PHP_FUNCTION(idna_to_unicode_utf8_from_utf8);
-
 
 ZEND_BEGIN_MODULE_GLOBALS(idn)
 	int allowunassigned;
