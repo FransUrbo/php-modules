@@ -40,11 +40,6 @@ PHP_MSHUTDOWN_FUNCTION(idn);
 PHP_MINFO_FUNCTION(idn);
 
 /* IDNA functions */
-PHP_FUNCTION(idn_allow_unassigned);
-PHP_FUNCTION(idn_use_std3_ascii_rules);
-PHP_FUNCTION(idn_get_allow_unassigned);
-PHP_FUNCTION(idn_get_use_std3_ascii_rules);
-
 PHP_FUNCTION(idn_prep_name);
 PHP_FUNCTION(idn_prep_kerberos5);
 PHP_FUNCTION(idn_prep_node);
@@ -60,8 +55,9 @@ PHP_FUNCTION(idn_to_ascii);
 PHP_FUNCTION(idn_to_unicode);
 
 ZEND_BEGIN_MODULE_GLOBALS(idn)
-	int allowunassigned;
-	int usestd3asciirules;
+	 int allow_unassigned_chars;	/* 0 */
+	 int use_std_3_ascii_rules;		/* 0 */
+	 char default_charset[30];		/* ISO-8859-1 */
 ZEND_END_MODULE_GLOBALS(idn)
 
 #ifdef ZTS

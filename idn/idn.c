@@ -13,11 +13,12 @@
    | license@php.net so we can mail you a copy immediately.               |
    +----------------------------------------------------------------------+
    | Authors: Turbo Fredriksson <turbo@bayour.com>                        |
-   |                                                                      |
+   |          Simon Josefsson <simon@josefsson.org>                       |
+   |          I stole most of idn() from his idn.c                        |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.14 2003-11-09 14:52:15 turbo Exp $ */
+/* $Id: idn.c,v 0.15 2003-11-10 12:38:14 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -60,6 +61,7 @@ ZEND_GET_MODULE(idn)
 /* }}} */
 
 /* {{{ LibIDN defines
+
  */
 #define IDN_PUNYCODE_ENCODE			 0	/* idn_punycode_encode() */
 #define IDN_PUNYCODE_DECODE			 1	/* idn_punycode_decode() */
@@ -75,6 +77,7 @@ ZEND_GET_MODULE(idn)
 #define IDN_PROFILE_PREP_TRACE	     9	/* idn_prep_trace() */
 #define IDN_PROFILE_PREP_SASL		10	/* idn_prep_sasl() */
 #define IDN_PROFILE_PREP_ISCSI		11	/* idn_prep_iscsi() */
+
 /* }}} */
 
 /* --------------------- */
@@ -82,16 +85,9 @@ ZEND_GET_MODULE(idn)
 /* --------------------- */
 
 /* {{{ idn_functions[]
- *
  * Every user visible function must have an entry in idn_functions[].
  */
 function_entry idn_functions[] = {
-	PHP_FE(idn_allow_unassigned,			NULL)
-	PHP_FE(idn_use_std3_ascii_rules,		NULL)
-
-	PHP_FE(idn_get_allow_unassigned,		NULL)
-	PHP_FE(idn_get_use_std3_ascii_rules,	NULL)
-
 	PHP_FE(idn_prep_name,					NULL)
 	PHP_FE(idn_prep_kerberos5,				NULL)
 	PHP_FE(idn_prep_node,					NULL)
@@ -108,6 +104,7 @@ function_entry idn_functions[] = {
 
 	{NULL, NULL, NULL}	/* Must be the last line in idn_functions[] */
 };
+
 /* }}} */
 
 /* {{{ idn_module_entry
@@ -130,8 +127,9 @@ zend_module_entry idn_module_entry = {
  */
 static void php_idn_init_globals(zend_idn_globals *idn_globals)
 {
-    idn_globals->allowunassigned = 0;
-	idn_globals->usestd3asciirules = 0;
+    idn_globals->allow_unassigned_chars = 0;
+	idn_globals->use_std_3_ascii_rules = 0;
+	strcpy(idn_globals->default_charset, "ISO-8859-1");
 }
 /* }}} */
 
@@ -140,8 +138,9 @@ static void php_idn_init_globals(zend_idn_globals *idn_globals)
 /* {{{ PHP_INI_BEGIN
  */
 PHP_INI_BEGIN()
-  STD_PHP_INI_ENTRY("idn.allowunassigned",   "0", PHP_INI_ALL, OnUpdateInt, allowunassigned,   zend_idn_globals, idn_globals)
-  STD_PHP_INI_ENTRY("idn.usestd3asciirules", "0", PHP_INI_ALL, OnUpdateInt, usestd3asciirules, zend_idn_globals, idn_globals)
+  STD_PHP_INI_ENTRY("idn.allow_unassigned_chars",	"0",			PHP_INI_ALL, OnUpdateInt,		allow_unassigned_chars,	zend_idn_globals,	idn_globals)
+  STD_PHP_INI_ENTRY("idn.use_std_3_ascii_rules",	"0",			PHP_INI_ALL, OnUpdateInt,		use_std_3_ascii_rules,	zend_idn_globals,	idn_globals)
+  STD_PHP_INI_ENTRY("idn.default_charset",			"ISO-8859-1",	PHP_INI_ALL, OnUpdateString,	default_charset,		zend_idn_globals,	idn_globals)
 PHP_INI_END()
 /* }}} */
 
@@ -174,7 +173,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.14 2003-11-09 14:52:15 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.15 2003-11-10 12:38:14 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -183,15 +182,15 @@ PHP_MINFO_FUNCTION(idn)
 /*   Internal functions  */
 /* --------------------- */
 
-/* {{{ string idn_charset(string charset)
+/* {{{ int idn_charset(string charset)
  * TODO: This is a dirty hack. We must be able to reset the choosen value
  *       after we're done with it
  */
-static char *idn_charset(char *charset)
+static int idn_charset(char *charset)
 {
 	if(charset == NULL)
 		// Set default charset - ISO-8859-1
-		return(setenv("CHARSET", "ISO-8859-1", 1));
+		return(setenv("CHARSET", IDNG(default_charset), 1));
 	else
 		// Set choosen charset
 		return(setenv("CHARSET", charset, 1));
@@ -243,7 +242,7 @@ static char *idn_prep(char *input, int prep)
 	free(tmpstring);
 	if(!output) {
 		/* Could not convert from UTF-8 to locale */
-		php_error(E_ERROR, "IDN_STRINGPREP: Could not convert from UTF-8 to locale (%s)", stringprep_locale_charset());
+		php_error(E_ERROR, "IDN_STRINGPREP: Could not convert from UTF-8 to %s", stringprep_locale_charset());
 		return(NULL);
 	}
 
@@ -291,7 +290,7 @@ static char *idn(char *input, int rule)
 			output = stringprep_utf8_to_locale(input);
 			if(!output) {
 				/* Could not convert from UTF-8 to locale */
-				php_error(E_ERROR, "IDN_PUNYCODE_ENCODE: Could not convert from UTF-8 to locale (%s)", stringprep_locale_charset());
+				php_error(E_ERROR, "IDN_PUNYCODE_ENCODE: Could not convert from UTF-8 to %s", stringprep_locale_charset());
 				return(NULL);
 			}
 			break;
@@ -326,13 +325,13 @@ static char *idn(char *input, int rule)
 			output = stringprep_utf8_to_locale(tmpstring);
 			if(!output) {
 				/* Could not convert from UTF-8 to locale */
-				php_error(E_ERROR, "IDN_PUNYCODE_DECODE: Could not convert from UTF-8 to locale (%s)", stringprep_locale_charset());
+				php_error(E_ERROR, "IDN_PUNYCODE_DECODE: Could not convert from UTF-8 to %s", stringprep_locale_charset());
 				return(NULL);
 			}
 			break;
 			/* }}} */
 
-		/* {{{ idn -a : unicode_to_ascii() */
+		/* {{{ idn -a : to_ascii() */
 		case IDN_IDNA_TO_ASCII:
 			tmpstring = stringprep_locale_to_utf8(input);
 			if(!tmpstring) {
@@ -350,8 +349,8 @@ static char *idn(char *input, int rule)
 			}
 
 			rc = idna_to_ascii_4z(q, &output,
-								  (IDNG(allowunassigned) ? IDNA_ALLOW_UNASSIGNED : 0) |
-								  (IDNG(usestd3asciirules) ? IDNA_USE_STD3_ASCII_RULES : 0));
+								  (IDNG(allow_unassigned_chars) ? IDNA_ALLOW_UNASSIGNED : 0) |
+								  (IDNG(use_std_3_ascii_rules) ? IDNA_USE_STD3_ASCII_RULES : 0));
 			free(q);
 			if(rc != IDNA_SUCCESS) {
 				/* Could not convert from IDNA to ASCII */
@@ -361,7 +360,7 @@ static char *idn(char *input, int rule)
 			break;
 			/* }}} */
 
-		/* {{{ idn -u : ascii_to_unicode() */
+		/* {{{ idn -u : to_unicode() */
 		case IDN_IDNA_TO_UNICODE:
 			tmpstring = stringprep_locale_to_utf8(input);
 			if(!tmpstring) {
@@ -379,8 +378,8 @@ static char *idn(char *input, int rule)
 			}
 
 			rc = idna_to_unicode_8z4z(tmpstring, &q,
-									  (IDNG(allowunassigned) ? IDNA_ALLOW_UNASSIGNED : 0) |
-									  (IDNG(usestd3asciirules) ? IDNA_USE_STD3_ASCII_RULES : 0));
+									  (IDNG(allow_unassigned_chars) ? IDNA_ALLOW_UNASSIGNED : 0) |
+									  (IDNG(use_std_3_ascii_rules) ? IDNA_USE_STD3_ASCII_RULES : 0));
 			if(rc != IDNA_SUCCESS) {
 				/* Could not convert from IDNA to unicode */
 				php_error(E_ERROR, "IDN_IDNA_TO_UNICODE: Could not convert from IDNA to unicode");
@@ -399,7 +398,7 @@ static char *idn(char *input, int rule)
 			free(tmpstring);
 			if(!output) {
 				/* Could not convert from UTF-8 to locale */
-				php_error(E_ERROR, "IDN_IDNA_TO_UNICODE: Could not convert from UTF-8 to locale (%s)", stringprep_locale_charset());
+				php_error(E_ERROR, "IDN_IDNA_TO_UNICODE: Could not convert from UTF-8 to %s", stringprep_locale_charset());
 				return(NULL);
 			}
 			break;
@@ -412,92 +411,11 @@ static char *idn(char *input, int rule)
 /* }}} */
 
 /* --------------------- */
-/*   Support functions   */
-/* --------------------- */
-
-/* {{{ proto bool idn_allow_unassigned(mixed c)
-   Toggle the Allow Unassigned value
- */
-PHP_FUNCTION(idn_allow_unassigned)
-{
-	pval **c;
-
-	switch(ZEND_NUM_ARGS()) {
-		case 0:
-			/* Toggle the current value */
-			if(IDNG(allowunassigned))
-				IDNG(allowunassigned) = FALSE;
-			else
-				IDNG(allowunassigned) = TRUE;
-
-			break;
-		case 1:
-			if(zend_get_parameters_ex(1, &c) == FAILURE) {
-				RETURN_FALSE;
-			}
-			convert_to_long_ex(c);
-
-			IDNG(allowunassigned) = (*c)->value.lval;
-			break;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool idn_use_std3_ascii_rules(mixed c)
-   Toggle the usage of the STD3 ASCII rules
- */
-PHP_FUNCTION(idn_use_std3_ascii_rules)
-{
-	pval **c;
-
-	switch(ZEND_NUM_ARGS()) {
-		case 0:
-			/* Toggle the current value */
-			if(IDNG(usestd3asciirules))
-				IDNG(usestd3asciirules) = FALSE;
-			else
-				IDNG(usestd3asciirules) = TRUE;
-
-			break;
-		case 1:
-			if(zend_get_parameters_ex(1, &c) == FAILURE) {
-				RETURN_FALSE;
-			}
-			convert_to_long_ex(c);
-			
-			IDNG(usestd3asciirules) = (*c)->value.lval;
-			break;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool idn_get_allow_unassigned(void)
-   Get the value of unassigned
- */
-PHP_FUNCTION(idn_get_allow_unassigned)
-{
-	RETURN_BOOL(IDNG(allowunassigned));
-}
-/* }}} */
-
-/* {{{ proto bool idn_get_use_std3_ascii_rules(void)
-   Get the value of the ascii rules
- */
-PHP_FUNCTION(idn_get_use_std3_ascii_rules)
-{
-	RETURN_BOOL(IDNG(usestd3asciirules));
-}
-/* }}} */
-
-/* --------------------- */
 /*  Stringprep wrappers  */
 /* --------------------- */
 
 /* {{{ proto string idn_prep_name(string input [, string charset])
+   Prepare string according to the Nameprep profile
  */
 PHP_FUNCTION(idn_prep_name)
 {
@@ -521,6 +439,7 @@ PHP_FUNCTION(idn_prep_name)
 /* }}} */
 
 /* {{{ proto string idn_prep_kerberos5(string input [, string charset])
+   Prepare string according to the Kerberos V profile
  */
 PHP_FUNCTION(idn_prep_kerberos5)
 {
@@ -544,6 +463,7 @@ PHP_FUNCTION(idn_prep_kerberos5)
 /* }}} */
 
 /* {{{ proto string idn_prep_node(string input [, string charset])
+   Prepare string according to the Nodeprep profile
  */
 PHP_FUNCTION(idn_prep_node)
 {
@@ -567,6 +487,7 @@ PHP_FUNCTION(idn_prep_node)
 /* }}} */
 
 /* {{{ proto string idn_prep_resource(string input [, string charset])
+   Prepare string according to the Resourceprep profile
  */
 PHP_FUNCTION(idn_prep_resource)
 {
@@ -590,6 +511,7 @@ PHP_FUNCTION(idn_prep_resource)
 /* }}} */
 
 /* {{{ proto string idn_prep_plain(string input [, string charset])
+   Prepare string according to the plain profile
  */
 PHP_FUNCTION(idn_prep_plain)
 {
@@ -613,6 +535,7 @@ PHP_FUNCTION(idn_prep_plain)
 /* }}} */
 
 /* {{{ proto string idn_prep_trace(string input [, string charset])
+   Prepare string according to the trace profile
  */
 PHP_FUNCTION(idn_prep_trace)
 {
@@ -636,6 +559,7 @@ PHP_FUNCTION(idn_prep_trace)
 /* }}} */
 
 /* {{{ proto string idn_prep_sasl(string input [, string charset])
+   Prepare string according to the SASLprep profile
  */
 PHP_FUNCTION(idn_prep_sasl)
 {
@@ -659,6 +583,7 @@ PHP_FUNCTION(idn_prep_sasl)
 /* }}} */
 
 /* {{{ proto string idn_prep_iscsi(string input [, string charset])
+   Prepare string according to the iSCSI profile
  */
 PHP_FUNCTION(idn_prep_iscsi)
 {
@@ -686,6 +611,7 @@ PHP_FUNCTION(idn_prep_iscsi)
 /* --------------------- */
 
 /* {{{ proto string idn_punycode_encode(string input [, string charset])
+   Decode a punycode string
  */
 PHP_FUNCTION(idn_punycode_encode)
 {
@@ -709,6 +635,7 @@ PHP_FUNCTION(idn_punycode_encode)
 /* }}} */
 
 /* {{{ proto string idn_punycode_decode(string input [, string charset])
+   Encode a punycode string
  */
 PHP_FUNCTION(idn_punycode_decode)
 {
@@ -736,6 +663,7 @@ PHP_FUNCTION(idn_punycode_decode)
 /* --------------------- */
 
 /* {{{ proto string idn_to_ascii(string input [, string charset])
+   Convert to ACE according to IDNA
  */
 PHP_FUNCTION(idn_to_ascii)
 {
@@ -759,6 +687,7 @@ PHP_FUNCTION(idn_to_ascii)
 /* }}} */
 
 /* {{{ proto string idn_to_unicode(string input [, string charset])
+   Convert from ACE according to IDNA
  */
 PHP_FUNCTION(idn_to_unicode)
 {
