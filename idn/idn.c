@@ -139,7 +139,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.6 2003-11-06 14:04:48 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.7 2003-11-06 14:37:00 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -314,7 +314,13 @@ PHP_FUNCTION(idn)
 
 		/* idn -a */
 		case IDN_IDNA_TO_ASCII:
-			q = stringprep_utf8_to_ucs4(input, -1, NULL);
+			tmpstring = stringprep_locale_to_utf8(input);
+			if(!tmpstring) {
+				/* Could not convert from locale to UTF-8 */
+				RETURN_STRING("IDN_IDNA_TO_ASCII: Could not convert from locale to UTF-8", 1);
+			}
+
+			q = stringprep_utf8_to_ucs4(tmpstring, -1, NULL);
 			if(!q) {
 				/* Could not convert from UCS-4 to UTF-8 */
 				RETURN_STRING("IDN_IDNA_TO_ASCII: Could not convert from UCS-4 to UTF-8", 1);
