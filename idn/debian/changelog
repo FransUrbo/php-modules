@@ -1,3 +1,18 @@
+php4-idn (1.0-3) unstable; urgency=low
+
+  * Add 'cli' to the list of php4 'modules' to add/remove the IDN
+    extension to.
+    Closes: #274593
+
+ -- Turbo Fredriksson <turbo@debian.org>  Thu, 28 Oct 2004 11:33:12 +0200
+
+php4-idn (1.0-2) unstable; urgency=low
+
+  * Changing "It's" to "Its" in control file - spelling/language error.
+    Closes: #268536
+
+ -- Turbo Fredriksson <turbo@debian.org>  Sat, 28 Aug 2004 13:19:37 +0200
+
 php4-idn (1.0-1) unstable; urgency=low
 
   * New upstream release.
