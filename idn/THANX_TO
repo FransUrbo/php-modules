@@ -1,3 +1,10 @@
 Sascha Kettler
-	For memory leak fixes.
-	Configuration setup fixes.
+	* For memory leak fixes.
+	* Configuration setup fixes.
+
+Thomas Jacob
+	* For reimplementing (albeight with my old code w/ changes).
+	* Removing the need for the environment variable CHARSET.
+	* Misc buffer size (memory leak) fixes.
+	* Slight rewrite of idn_idna_to_ascii() and idn_unicode_to_ascii()
+	  - Shortened by usage of other LibIDN functions.
