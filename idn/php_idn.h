@@ -44,7 +44,16 @@ PHP_FUNCTION(idn_allow_unassigned);
 PHP_FUNCTION(idn_use_std3_ascii_rules);
 PHP_FUNCTION(idn_get_allow_unassigned);
 PHP_FUNCTION(idn_get_use_std3_ascii_rules);
-PHP_FUNCTION(idn_stringprep);
+
+PHP_FUNCTION(idn_prep_name);
+PHP_FUNCTION(idn_prep_kerberos5);
+PHP_FUNCTION(idn_prep_node);
+PHP_FUNCTION(idn_prep_resource);
+PHP_FUNCTION(idn_prep_plain);
+PHP_FUNCTION(idn_prep_trace);
+PHP_FUNCTION(idn_prep_sasl);
+PHP_FUNCTION(idn_prep_iscsi);
+
 PHP_FUNCTION(idn_punycode_encode);
 PHP_FUNCTION(idn_punycode_decode);
 PHP_FUNCTION(idn_unicode_to_ascii);
