@@ -24,7 +24,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.20 2003-11-13 07:07:46 turbo Exp $ */
+/* $Id: idn.c,v 0.21 2004-01-09 14:44:53 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -116,7 +116,9 @@ function_entry idn_functions[] = {
 /* {{{ idn_module_entry
  */
 zend_module_entry idn_module_entry = {
+#if ZEND_MODULE_API_NO >= 20010901
 	STANDARD_MODULE_HEADER,
+#endif
 	"idn",
 	idn_functions,
 	PHP_MINIT(idn),
@@ -124,7 +126,9 @@ zend_module_entry idn_module_entry = {
 	NULL,
 	NULL,
 	PHP_MINFO(idn),
+#if ZEND_MODULE_API_NO >= 20010901
     NO_VERSION_YET, /* Replace with version number for your extension */
+#endif
 	STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
@@ -180,7 +184,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.20 2003-11-13 07:07:46 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.21 2004-01-09 14:44:53 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
