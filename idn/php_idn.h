@@ -56,8 +56,8 @@ PHP_FUNCTION(idn_prep_iscsi);
 
 PHP_FUNCTION(idn_punycode_encode);
 PHP_FUNCTION(idn_punycode_decode);
-PHP_FUNCTION(idn_unicode_to_ascii);
-PHP_FUNCTION(idn_ascii_to_unicode);
+PHP_FUNCTION(idn_to_ascii);
+PHP_FUNCTION(idn_to_unicode);
 
 ZEND_BEGIN_MODULE_GLOBALS(idn)
 	int allowunassigned;

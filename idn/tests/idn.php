@@ -1,4 +1,4 @@
-<?php /* $Id: idn.php,v 1.4 2003-11-08 11:32:36 turbo Exp $ */ ?>
+<?php /* $Id: idn.php,v 1.5 2003-11-09 14:52:31 turbo Exp $ */ ?>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -25,53 +25,52 @@ function pql_execute($command, $hide=true) {
     return $ret;
 }
 
-if(function_exists("idn_ascii_to_unicode") && function_exists("idn_unicode_to_ascii")) {
-    if($domain) {
-	// Set the locale to UTF-8
-	putenv("CHARSET=ISO-8859-1");
-	//pql_execute("env", false);
+if(function_exists("idn_to_unicode") && function_exists("idn_to_ascii")) {
+  // Set the locale to UTF-8
+  $charset = 'ISO-8859-1';
 	
-	// Convert the value
-	if($form) {
-	  if($rule == 'name')
-	    $domain_out = idn_prep_name($domain);
-	  elseif($rule == 'krb')
-	    $domain_out = idn_prep_kerberos5($domain);
-	  elseif($rule == 'node')
-	    $domain_out = idn_prep_node($domain);
-	  elseif($rule == 'resource')
-	    $domain_out = idn_prep_resource($domain);
-	  elseif($rule == 'plain')
-	    $domain_out = idn_prep_plain($domain);
-	  elseif($rule == 'trace')
-	    $domain_out = idn_prep_trace($domain);
-	  elseif($rule == 'sasl')
-	    $domain_out = idn_prep_sasl($domain);
-	  elseif($rule == 'iscsi')
-	    $domain_out = idn_prep_iscsi($domain);
-	} else {
-	  if($rule == 'unicode2ascii')
-	    $domain_out = idn_unicode_to_ascii($domain);
-	  elseif($rule == 'ascii2unicode')
-	    $domain_out = idn_ascii_to_unicode($domain);
-	  elseif($rule == 'punyencode')
-	    $domain_out = idn_punycode_encode($domain);
-	  elseif($rule == 'punydecode')
-	    $domain_out = idn_punycode_decode($domain);
-	  else
-	    die("Non supported conversion '$rule'");
-	}
-
-	// Output the result (could contain the error message)
-	echo "$domain: '$domain_out'<br>";
-	$domain = $domain_out;
+  if($domain) {
+    // Convert the value
+    if($form) {
+      if($rule == 'name')
+	$domain_out = idn_prep_name($domain, $charset);
+      elseif($rule == 'krb')
+	$domain_out = idn_prep_kerberos5($domain, $charset);
+      elseif($rule == 'node')
+	$domain_out = idn_prep_node($domain, $charset);
+      elseif($rule == 'resource')
+	$domain_out = idn_prep_resource($domain, $charset);
+      elseif($rule == 'plain')
+	$domain_out = idn_prep_plain($domain, $charset);
+      elseif($rule == 'trace')
+	$domain_out = idn_prep_trace($domain, $charset);
+      elseif($rule == 'sasl')
+	$domain_out = idn_prep_sasl($domain, $charset);
+      elseif($rule == 'iscsi')
+	$domain_out = idn_prep_iscsi($domain, $charset);
+    } else {
+      if($rule == '2ascii')
+	$domain_out = idn_to_ascii($domain, $charset);
+      elseif($rule == '2unicode')
+	$domain_out = idn_to_unicode($domain, $charset);
+      elseif($rule == 'punyencode')
+	$domain_out = idn_punycode_encode($domain, $charset);
+      elseif($rule == 'punydecode')
+	$domain_out = idn_punycode_decode($domain, $charset);
+      else
+	die("Non supported conversion '$rule'");
     }
+    
+    // Output the result (could contain the error message)
+    echo "$domain: '$domain_out'<br>";
+    $domain = $domain_out;
+  }
 ?>
     <form action="<?=$PHP_SELF?>" method="post">
-      <input type="text" name="domain" value="<?=$domain?>" size="30">
+      <input type="text" name="domain" value="<?=$domain?>" size="50">
       <select name="rule">
-        <option value="unicode2ascii">UNICODE 2 ASCII</option>
-        <option value="ascii2unicode">ASCII 2 UNICODE</option>
+        <option value="2ascii">UNICODE 2 ASCII</option>
+        <option value="2unicode">ASCII 2 UNICODE</option>
 	<option value="punyencode">PUNYCODE ENCODE</option>
 	<option value="punydecode">PUNYCODE DECODE</option>
       </select>
@@ -79,7 +78,7 @@ if(function_exists("idn_ascii_to_unicode") && function_exists("idn_unicode_to_as
     </form>
 
     <form action="<?=$PHP_SELF?>" method="post">
-      <input type="text" name="domain" value="<?=$domain?>" size="30">
+      <input type="text" name="domain" value="<?=$domain?>" size="50">
       <input type="hidden" name="form" value="stringprep">
       <select name="rule">
 	<option value="name">Nameprep</option>
@@ -100,8 +99,17 @@ if(function_exists("idn_ascii_to_unicode") && function_exists("idn_unicode_to_as
 ?>
     <a href="idna.php.txt">show code</a>
 <?php
-    die("Module IDN isn't loaded (can't find function idn_ascii_to_unicode and/or idn_unicode_to_ascii)");
+    die("Module IDN isn't loaded (can't find function idn_to_unicode and/or idn_to_unicode)");
 }
 ?>
   </body>
 </html>
+
+<?php
+  /*
+   * Local variables:
+   * tab-width: 4
+   * mode: php
+   * End:
+   */
+?>

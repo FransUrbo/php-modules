@@ -17,7 +17,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.13 2003-11-08 11:30:58 turbo Exp $ */
+/* $Id: idn.c,v 0.14 2003-11-09 14:52:15 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -103,8 +103,8 @@ function_entry idn_functions[] = {
 
 	PHP_FE(idn_punycode_encode,				NULL)
 	PHP_FE(idn_punycode_decode,				NULL)
-	PHP_FE(idn_unicode_to_ascii,			NULL)
-	PHP_FE(idn_ascii_to_unicode,			NULL)
+	PHP_FE(idn_to_ascii,					NULL)
+	PHP_FE(idn_to_unicode,					NULL)
 
 	{NULL, NULL, NULL}	/* Must be the last line in idn_functions[] */
 };
@@ -174,7 +174,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.13 2003-11-08 11:30:58 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.14 2003-11-09 14:52:15 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -183,9 +183,24 @@ PHP_MINFO_FUNCTION(idn)
 /*   Internal functions  */
 /* --------------------- */
 
-/* {{{ string prep(string input, string prep)
+/* {{{ string idn_charset(string charset)
+ * TODO: This is a dirty hack. We must be able to reset the choosen value
+ *       after we're done with it
+ */
+static char *idn_charset(char *charset)
+{
+	if(charset == NULL)
+		// Set default charset - ISO-8859-1
+		return(setenv("CHARSET", "ISO-8859-1", 1));
+	else
+		// Set choosen charset
+		return(setenv("CHARSET", charset, 1));
+}
+/* }}} */
+
+/* {{{ string idn_prep(string input, string prep)
 */
-static char *prep(char *input, int prep)
+static char *idn_prep(char *input, int prep)
 {
 	char *output, *tmpstring;
 	int rc;
@@ -482,147 +497,187 @@ PHP_FUNCTION(idn_get_use_std3_ascii_rules)
 /*  Stringprep wrappers  */
 /* --------------------- */
 
-/* {{{ proto string idn_prep_name(string input)
+/* {{{ proto string idn_prep_name(string input [, string charset])
  */
 PHP_FUNCTION(idn_prep_name)
 {
-	char *input, *output;
-	pval **yyinput;
+	char *output;
+	pval **yyinput, **yycharset;
+	int argv = ZEND_NUM_ARGS();
 
-    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
-	input = (*yyinput)->value.str.val;
 
-	output = prep(input, IDN_PROFILE_PREP_NAME);
-	RETURN_STRING(output, 1);
+	if(argv == 2) {
+		convert_to_string_ex(yycharset);
+		idn_charset((*yycharset)->value.str.val);
+	}
+
+	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_NAME);
+	RETVAL_STRINGL(output, strlen(output), 1);
 }
 /* }}} */
 
-/* {{{ proto string idn_prep_kerberos5(string input)
+/* {{{ proto string idn_prep_kerberos5(string input [, string charset])
  */
 PHP_FUNCTION(idn_prep_kerberos5)
 {
-	char *input, *output;
-	pval **yyinput;
+	char *output;
+	pval **yyinput, **yycharset;
+	int argv = ZEND_NUM_ARGS();
 
-    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
-	input = (*yyinput)->value.str.val;
 
-	output = prep(input, IDN_PROFILE_PREP_KRB);
-	RETURN_STRING(output, 1);
+	if(argv == 2) {
+		convert_to_string_ex(yycharset);
+		idn_charset((*yycharset)->value.str.val);
+	}
+
+	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_KRB);
+	RETVAL_STRINGL(output, strlen(output), 1);
 }
 /* }}} */
 
-/* {{{ proto string idn_prep_node(string input)
+/* {{{ proto string idn_prep_node(string input [, string charset])
  */
 PHP_FUNCTION(idn_prep_node)
 {
-	char *input, *output;
-	pval **yyinput;
+	char *output;
+	pval **yyinput, **yycharset;
+	int argv = ZEND_NUM_ARGS();
 
-    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
-	input = (*yyinput)->value.str.val;
 
-	output = prep(input, IDN_PROFILE_PREP_NODE);
-	RETURN_STRING(output, 1);
+	if(argv == 2) {
+		convert_to_string_ex(yycharset);
+		idn_charset((*yycharset)->value.str.val);
+	}
+
+	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_NODE);
+	RETVAL_STRINGL(output, strlen(output), 1);
 }
 /* }}} */
 
-/* {{{ proto string idn_prep_resource(string input)
+/* {{{ proto string idn_prep_resource(string input [, string charset])
  */
 PHP_FUNCTION(idn_prep_resource)
 {
-	char *input, *output;
-	pval **yyinput;
+	char *output;
+	pval **yyinput, **yycharset;
+	int argv = ZEND_NUM_ARGS();
 
-    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
-	input = (*yyinput)->value.str.val;
 
-	output = prep(input, IDN_PROFILE_PREP_RESOURCE);
-	RETURN_STRING(output, 1);
+	if(argv == 2) {
+		convert_to_string_ex(yycharset);
+		idn_charset((*yycharset)->value.str.val);
+	}
+
+	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_RESOURCE);
+	RETVAL_STRINGL(output, strlen(output), 1);
 }
 /* }}} */
 
-/* {{{ proto string idn_prep_plain(string input)
+/* {{{ proto string idn_prep_plain(string input [, string charset])
  */
 PHP_FUNCTION(idn_prep_plain)
 {
-	char *input, *output;
-	pval **yyinput;
+	char *output;
+	pval **yyinput, **yycharset;
+	int argv = ZEND_NUM_ARGS();
 
-    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
-	input = (*yyinput)->value.str.val;
 
-	output = prep(input, IDN_PROFILE_PREP_PLAIN);
-	RETURN_STRING(output, 1);
+	if(argv == 2) {
+		convert_to_string_ex(yycharset);
+		idn_charset((*yycharset)->value.str.val);
+	}
+
+	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_PLAIN);
+	RETVAL_STRINGL(output, strlen(output), 1);
 }
 /* }}} */
 
-/* {{{ proto string idn_prep_trace(string input)
+/* {{{ proto string idn_prep_trace(string input [, string charset])
  */
 PHP_FUNCTION(idn_prep_trace)
 {
-	char *input, *output;
-	pval **yyinput;
+	char *output;
+	pval **yyinput, **yycharset;
+	int argv = ZEND_NUM_ARGS();
 
-    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
-	input = (*yyinput)->value.str.val;
 
-	output = prep(input, IDN_PROFILE_PREP_TRACE);
-	RETURN_STRING(output, 1);
+	if(argv == 2) {
+		convert_to_string_ex(yycharset);
+		idn_charset((*yycharset)->value.str.val);
+	}
+
+	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_TRACE);
+	RETVAL_STRINGL(output, strlen(output), 1);
 }
 /* }}} */
 
-/* {{{ proto string idn_prep_sasl(string input)
+/* {{{ proto string idn_prep_sasl(string input [, string charset])
  */
 PHP_FUNCTION(idn_prep_sasl)
 {
-	char *input, *output;
-	pval **yyinput;
+	char *output;
+	pval **yyinput, **yycharset;
+	int argv = ZEND_NUM_ARGS();
 
-    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
-	input = (*yyinput)->value.str.val;
 
-	output = prep(input, IDN_PROFILE_PREP_SASL);
-	RETURN_STRING(output, 1);
+	if(argv == 2) {
+		convert_to_string_ex(yycharset);
+		idn_charset((*yycharset)->value.str.val);
+	}
+
+	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_SASL);
+	RETVAL_STRINGL(output, strlen(output), 1);
 }
 /* }}} */
 
-/* {{{ proto string idn_prep_iscsi(string input)
+/* {{{ proto string idn_prep_iscsi(string input [, string charset])
  */
 PHP_FUNCTION(idn_prep_iscsi)
 {
-	char *input, *output;
-	pval **yyinput;
+	char *output;
+	pval **yyinput, **yycharset;
+	int argv = ZEND_NUM_ARGS();
 
-    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
-	input = (*yyinput)->value.str.val;
 
-	output = prep(input, IDN_PROFILE_PREP_ISCSI);
-	RETURN_STRING(output, 1);
+	if(argv == 2) {
+		convert_to_string_ex(yycharset);
+		idn_charset((*yycharset)->value.str.val);
+	}
+
+	output = idn_prep((*yyinput)->value.str.val, IDN_PROFILE_PREP_ISCSI);
+	RETVAL_STRINGL(output, strlen(output), 1);
 }
 /* }}} */
 
@@ -630,39 +685,49 @@ PHP_FUNCTION(idn_prep_iscsi)
 /*   Punycode wrappers   */
 /* --------------------- */
 
-/* {{{ proto string idn_punycode_encode(string input)
+/* {{{ proto string idn_punycode_encode(string input [, string charset])
  */
 PHP_FUNCTION(idn_punycode_encode)
 {
-	char *input, *output;
-	pval **yyinput;
+	char *output;
+	pval **yyinput, **yycharset;
+	int argv = ZEND_NUM_ARGS();
 
-    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
-	input = (*yyinput)->value.str.val;
 
-	output = idn(input, IDN_PUNYCODE_ENCODE);
-	RETURN_STRING(output, 1);
+	if(argv == 2) {
+		convert_to_string_ex(yycharset);
+		idn_charset((*yycharset)->value.str.val);
+	}
+
+	output = idn((*yyinput)->value.str.val, IDN_PUNYCODE_ENCODE);
+	RETVAL_STRINGL(output, strlen(output), 1);
 }
 /* }}} */
 
-/* {{{ proto string idn_punycode_decode(string input)
+/* {{{ proto string idn_punycode_decode(string input [, string charset])
  */
 PHP_FUNCTION(idn_punycode_decode)
 {
-	char *input, *output;
-	pval **yyinput;
+	char *output;
+	pval **yyinput, **yycharset;
+	int argv = ZEND_NUM_ARGS();
 
-    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
-	input = (*yyinput)->value.str.val;
 
-	output = idn(input, IDN_PUNYCODE_DECODE);
-	RETURN_STRING(output, 1);
+	if(argv == 2) {
+		convert_to_string_ex(yycharset);
+		idn_charset((*yycharset)->value.str.val);
+	}
+
+	output = idn((*yyinput)->value.str.val, IDN_PUNYCODE_DECODE);
+	RETVAL_STRINGL(output, strlen(output), 1);
 }
 /* }}} */
 
@@ -670,40 +735,49 @@ PHP_FUNCTION(idn_punycode_decode)
 /*     IDNA wrappers     */
 /* --------------------- */
 
-/* {{{ proto string idn_unicode_to_ascii(string input)
+/* {{{ proto string idn_to_ascii(string input [, string charset])
  */
-PHP_FUNCTION(idn_unicode_to_ascii)
+PHP_FUNCTION(idn_to_ascii)
 {
-	char *input, *output;
-	pval **yyinput;
+	char *output;
+	pval **yyinput, **yycharset;
+	int argv = ZEND_NUM_ARGS();
 
-    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
-	input = (*yyinput)->value.str.val;
 
-	output = idn(input, IDN_IDNA_TO_ASCII);
-	RETURN_STRING(output, 1);
+	if(argv == 2) {
+		convert_to_string_ex(yycharset);
+		idn_charset((*yycharset)->value.str.val);
+	}
+
+	output = idn((*yyinput)->value.str.val, IDN_IDNA_TO_ASCII);
+	RETVAL_STRINGL(output, strlen(output), 1);
 }
 /* }}} */
 
-/* {{{ proto string idn_ascii_to_unicode(string input)
-
+/* {{{ proto string idn_to_unicode(string input [, string charset])
  */
-PHP_FUNCTION(idn_ascii_to_unicode)
+PHP_FUNCTION(idn_to_unicode)
 {
-	char *input, *output;
-	pval **yyinput;
+	char *output;
+	pval **yyinput, **yycharset;
+	int argv = ZEND_NUM_ARGS();
 
-    if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &yyinput) == FAILURE) {
+    if ((argv < 0) || (argv > 2) || (zend_get_parameters_ex(argv, &yyinput, &yycharset) == FAILURE)) {
         WRONG_PARAM_COUNT;
     }
     convert_to_string_ex(yyinput);
-	input = (*yyinput)->value.str.val;
 
-	output = idn(input, IDN_IDNA_TO_UNICODE);
-	RETURN_STRING(output, 1);
+	if(argv == 2) {
+		convert_to_string_ex(yycharset);
+		idn_charset((*yycharset)->value.str.val);
+	}
+
+	output = idn((*yyinput)->value.str.val, IDN_IDNA_TO_UNICODE);
+	RETVAL_STRINGL(output, strlen(output), 1);
 }
 
 /* }}} */
