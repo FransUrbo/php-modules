@@ -42,6 +42,8 @@ PHP_MINFO_FUNCTION(idn);
 /* IDNA functions */
 PHP_FUNCTION(idn_allow_unassigned);
 PHP_FUNCTION(idn_use_std3_ascii_rules);
+PHP_FUNCTION(idn_get_allow_unassigned);
+PHP_FUNCTION(idn_get_use_std3_ascii_rules);
 PHP_FUNCTION(idn);
 
 ZEND_BEGIN_MODULE_GLOBALS(idn)

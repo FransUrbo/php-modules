@@ -45,9 +45,13 @@ ZEND_GET_MODULE(idn)
  * Every user visible function must have an entry in idn_functions[].
  */
 function_entry idn_functions[] = {
-	PHP_FE(idn_allow_unassigned,		NULL)
-	PHP_FE(idn_use_std3_ascii_rules,	NULL)
-	PHP_FE(idn,							NULL)
+	PHP_FE(idn_allow_unassigned,			NULL)
+	PHP_FE(idn_use_std3_ascii_rules,		NULL)
+
+	PHP_FE(idn_get_allow_unassigned,		NULL)
+	PHP_FE(idn_get_use_std3_ascii_rules,	NULL)
+
+	PHP_FE(idn,								NULL)
 
 	{NULL, NULL, NULL}	/* Must be the last line in idn_functions[] */
 };
@@ -114,7 +118,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.2 2003-10-30 12:06:13 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.3 2003-10-30 12:39:23 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -178,6 +182,26 @@ PHP_FUNCTION(idn_use_std3_ascii_rules)
 	RETURN_TRUE;
 }
 /* }}} */
+
+/* {{{ proto bool idn_get_allow_unassigned(void)
+   Get the value of unassigned
+ */
+PHP_FUNCTION(idn_get_allow_unassigned)
+{
+	RETURN_BOOL(IDNG(allowunassigned));
+}
+/* }}} */
+
+/* {{{ proto bool idn_get_use_std3_ascii_rules(void)
+   Get the value of unassigned
+ */
+PHP_FUNCTION(idn_get_use_std3_ascii_rules)
+{
+	RETURN_BOOL(IDNG(usestd3asciirules));
+}
+/* }}} */
+
+
 
 /* {{{ proto string idn(string input, int rule)
    Convert the input according to rule
