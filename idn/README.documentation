@@ -1,0 +1,29 @@
+I could not figure out how to build the documentation separate from the
+PHP documentation project (to much XML etc).
+
+So what you should do is to checkout the 'phpdoc' module from
+PHP.net (see http://www.php.net/anoncvs.php - at the bottom)
+for more information.
+
+----- s n i p -----
+cd /tmp
+cvs -d :pserver:cvsread@cvs.php.net:/repository checkout phpdoc
+----- s n i p -----
+
+
+Inside this module, create the directory 'en/reference/idn'
+and copy the content of the directory 'reference' there.
+
+----- s n i p -----
+mkdir /tmp/phpdoc/en/reference/idn
+cp reference/* /tmp/phpdoc/en/reference/idn
+----- s n i p -----
+
+Then go to the phpdoc top directory and build the HTML documentation.
+This will take some time, because (unfortunatly!) it builds EVERYTHING
+(not only the PHP-IDN stuff).
+
+----- s n i p -----
+cd /tmp/phpdoc/en/reference/idn
+make
+----- s n i p -----
