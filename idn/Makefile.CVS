@@ -22,13 +22,13 @@ tag:
 	@(VERSION=`cat .version | sed 's@ .*@@'`; \
 	  MAJOR=`expr substr $$VERSION 1 1`; \
 	  MINOR=`expr substr $$VERSION 3 2`; \
-	  OLDLV=`expr $$MINOR - 1`; \
-	  echo "$$MAJOR.$$OLDLV" > .version.old; \
-	  echo "$$MAJOR.$$MINOR" > .version; \
-	  echo -n "We are now at version $$MAJOR.$$MINOR"; \
-	  TAG="REL_`echo $$MAJOR`_`echo $$MINOR`"; \
-	  echo -n $(TAG) > .tag; \
-	  echo cvs tag: $$TAG; \
+	  NEWLV=`expr $$MINOR + 1`; \
+	  echo "$$MAJOR.$$MINOR" > .version.old; \
+	  echo "$$MAJOR.$$NEWLV" > .version; \
+	  VERSION="`echo $$MAJOR`.`echo $$NEWLV`"; \
+	  echo "We are now at version $$VERSION"; \
+	  TAG="REL_`echo $$MAJOR`_`echo $$NEWLV`"; \
+	  echo -n $$TAG > .tag; \
 	  cvs commit -m "New release - $$MAJOR.$$MINOR." \
 		.version .version.old; \
 	  cvs tag -RF $$TAG; \
