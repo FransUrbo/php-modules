@@ -166,7 +166,7 @@
         <option value="T.61-8BIT">T.61-8BIT</option>
         <option value="TIS-620">TIS-620</option>
         <option value="UHC">UHC</option>
-        <option value="elected>UTF-8"selected>UTF-8</option>
+        <option value="UTF-8" selected>UTF-8</option>
         <option value="UTF-7">UTF-7</option>
         <option value="VISCII">VISCII</option>
         <option value="WIN-SAMI-2">WIN-SAMI-2</option>
