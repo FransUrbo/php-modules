@@ -19,20 +19,14 @@ endif
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
-	# Add here commands to configure the package.
 	phpize
 	./configure
 	touch configure-stamp
 
-
 build: build-stamp
-
 build-stamp: configure-stamp 
 	dh_testdir
-
-	# Add here commands to compile the package.
 	$(MAKE)
-
 	touch build-stamp
 
 clean:
@@ -40,18 +34,21 @@ clean:
 	dh_testroot
 	rm -f build-stamp configure-stamp
 
-	# Add here commands to clean up after the build process.
-	-$(MAKE) clean
-	rm -f config.status config.log
+	-$(MAKE) distclean
+	rm -fr acinclude.m4 dynlib.m4 configure.in install-sh mkinstalldirs missing \
+		aclocal.m4 config.h.in configure config.guess config.sub ltmain.sh \
+		configure-stamp libs.mk .deps build modules
+
 	dh_clean
 
 install: build
 	dh_testdir
 	dh_testroot
+
 	dh_clean -k
 	dh_installdirs
 
-	install -m755 modules/php_idn.so debian/php4-idn/usr/lib/php4/20010901/idn.so
+	install -m755 modules/idn.so debian/php4-idn/usr/lib/php4/20010901/idn.so
 
 # Build architecture-independent files here.
 binary-indep: build install
