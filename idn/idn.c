@@ -17,6 +17,8 @@
    +----------------------------------------------------------------------+
  */
 
+#define IS_EXT_MODULE
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -137,7 +139,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.4 2003-10-30 13:54:36 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.5 2003-11-06 13:59:54 turbo Exp $" );
 	php_info_print_table_end();
 }
 /* }}} */
@@ -230,11 +232,16 @@ PHP_FUNCTION(idn)
 	unsigned long *q;
 	size_t len, len2;
 
-	RETURN_STRING("Function idn() not implemented", 1);
-
-	if (ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &input, &rule) == FAILURE) {
+	pval **yyinput, **yyrule;
+	if (ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &yyinput, &yyrule) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
+
+	convert_to_string_ex(yyinput);
+	input = (*yyinput)->value.str.val;
+
+	convert_to_long_ex(yyrule);
+	rule = (*yyrule)->value.lval;                                                       
 
 	switch(rule) {
 		/* idn -s */
@@ -242,7 +249,7 @@ PHP_FUNCTION(idn)
 			output = stringprep_locale_to_utf8(input);
 			if(!output) {
 				/* Could not convert from locale to UTF-8 */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_STRINGPREP: Could not convert from locale to UTF-8", 1);
 			}			
 			
 			/* TODO: Third param! */
@@ -254,7 +261,7 @@ PHP_FUNCTION(idn)
 			output = stringprep_utf8_to_locale(tmpstring);
 			if(!output) {
 				/* Could not convert from UTF-8 to locale */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_STRINGPREP: Could not convert from UTF-8 to locale", 1);
 			}
 			break;
 								
@@ -263,20 +270,20 @@ PHP_FUNCTION(idn)
 			output = stringprep_locale_to_utf8(input);
 			if(!output) {
 				/* Could not convert from locale to UTF-8 */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_PUNYCODE_ENCODE: Could not convert from locale to UTF-8", 1);
 			}			
 
 			q = stringprep_utf8_to_ucs4(output, -1, &len);
 			if(!q) {
 				/* Could not convert from UTF-8 to UCS-4 */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_PUNYCODE_ENCODE: Could not convert from UTF-8 to UCS-4", 1);
 			}
 
 			len2 = BUFSIZ;
 			rc = punycode_encode(len, q, NULL, &len2, input);
 			if(rc != PUNYCODE_SUCCESS) {
 				/* Could not Puny encode string (?) */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_PUNYCODE_ENCODE: Could not Puny encode string", 1);
 			}
 			
 
@@ -284,7 +291,7 @@ PHP_FUNCTION(idn)
 			output = stringprep_utf8_to_locale(input);
 			if(!output) {
 				/* Could not convert from UTF-8 to locale */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_PUNYCODE_ENCODE: Could not convert from UTF-8 to locale", 1);
 			}
 			break;
 
@@ -294,64 +301,52 @@ PHP_FUNCTION(idn)
 			q = (unsigned long *) malloc(len * sizeof(q[0]));
 			if(!q) {
 				/* Could not allocate memory for q */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_PUNYCODE_DECODE: Could not allocate memory", 1);
 			}
 
 			rc = punycode_decode(strlen(input), input, &len, q, NULL);
 			if(rc != PUNYCODE_SUCCESS) {
 				/* Could not Puny decode string (?) */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_PUNYCODE_DECODE: Could not Puny decode string", 1);
 			}
 
 			q[len] = 0;
 			tmpstring = stringprep_ucs4_to_utf8(q, -1, NULL, NULL);
 			if(!tmpstring) {
 				/* Could not convert from UCS-4 to UTF-8 */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_PUNYCODE_DECODE: Could not convert from UCS-4 to UTF-8", 1);
 			}
 
 			output = stringprep_utf8_to_locale(tmpstring);
 			if(!output) {
 				/* Could not convert from UTF-8 to locale */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_PUNYCODE_DECODE: Could not convert from UTF-8 to locale", 1);
 			}
 			break;
 
 		/* idn -a */
 		case IDN_IDNA_TO_ASCII:
-			tmpstring = stringprep_locale_to_utf8(input);
-			if(!tmpstring) {
-				/* Could not convert from locale to UTF-8 */
-				RETURN_FALSE;
-			}
-
-			q = stringprep_utf8_to_ucs4(tmpstring, -1, NULL);
+			q = stringprep_utf8_to_ucs4(input, -1, NULL);
 			if(!q) {
 				/* Could not convert from UCS-4 to UTF-8 */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_IDNA_TO_ASCII: Could not convert from UCS-4 to UTF-8", 1);
 			}
 
-			rc = idna_to_ascii_from_ucs4(q, &tmpstring,
+			rc = idna_to_ascii_from_ucs4(q, &output,
 										 IDNG(allowunassigned),
 										 IDNG(usestd3asciirules));
 			if(rc != IDNA_SUCCESS) {
 				/* Could not convert from IDNA to ASCII */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_IDNA_TO_ASCII: Could not convert from IDNA to ASCII", 1);
 			}
 			break;
 
 		/* idn -u */
 		case IDN_IDNA_TO_UNICODE:
-			tmpstring = stringprep_locale_to_utf8(input);
-			if(!tmpstring) {
-				/* Could not convert from locale to UTF-8 */
-				RETURN_FALSE;
-			}
-
-			q = stringprep_utf8_to_ucs4(tmpstring, -1, NULL);
+			q = stringprep_utf8_to_ucs4(input, -1, NULL);
 			if(!q) {
 				/* Could not convert from UCS-4 to UTF-8 */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_IDNA_TO_UNICODE: Could not convert from UCS-4 to UTF-8", 1);
 			}
 
 			rc = idna_to_unicode_ucs4_from_utf8(tmpstring, &q,
@@ -359,18 +354,18 @@ PHP_FUNCTION(idn)
 												IDNG(usestd3asciirules));
 			if(rc != IDNA_SUCCESS) {
 				/* Could not convert from IDNA to unicode */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_IDNA_TO_UNICODE: Could not convert from IDNA to unicode", 1);
 			}
 
 			output = stringprep_ucs4_to_utf8(q, -1, NULL, NULL);
 			if(!output) {
 				/* Could not convert from UCS-4 to UTF-8 */
-				RETURN_FALSE;
+				RETURN_STRING("IDN_IDNA_TO_UNICODE: Could not convert from UCS-4 to UTF-8", 1);
 			}
 			break;
 	}
 
-	RETURN_STRING(output, 1);
+	RETURN_STRING(output, 0);
 }
 /* }}} */
 
