@@ -39,19 +39,10 @@ PHP_MINIT_FUNCTION(idn);
 PHP_MSHUTDOWN_FUNCTION(idn);
 PHP_MINFO_FUNCTION(idn);
 
-/* IDNA2ASCII functions */
-PHP_FUNCTION(idna_to_ascii);
-PHP_FUNCTION(idna_to_ascii_from_locale);
-PHP_FUNCTION(idna_to_ascii_from_ucs4);
-PHP_FUNCTION(idna_to_ascii_from_utf8);
-
-/* IDNA2UNICODE functions */
-PHP_FUNCTION(idna_to_unicode);
-PHP_FUNCTION(idna_to_unicode_locale_from_locale);
-PHP_FUNCTION(idna_to_unicode_locale_from_utf8);
-PHP_FUNCTION(idna_to_unicode_ucs4_from_ucs4);
-PHP_FUNCTION(idna_to_unicode_ucs4_from_utf8);
-PHP_FUNCTION(idna_to_unicode_utf8_from_utf8);
+/* IDNA functions */
+PHP_FUNCTION(idn_allow_unassigned);
+PHP_FUNCTION(idn_use_std3_ascii_rules);
+PHP_FUNCTION(idn);
 
 ZEND_BEGIN_MODULE_GLOBALS(idn)
 	int allowunassigned;
