@@ -1,5 +1,27 @@
 <?php
-/* $Id: idn.php,v 1.9 2004-04-18 08:40:53 turbo Exp $ */
+/* $Id: idn.php,v 1.10 2004-05-26 08:47:38 turbo Exp $ */
+
+if($_REQUEST["show"] == 'source') {
+	show_source(__FILE__);
+	die();
+} elseif($_REQUEST["show"] == 'versions') {
+   ob_start();
+   phpinfo(INFO_MODULES);
+   $php_info .= ob_get_contents();
+   ob_end_clean();
+
+   $php_info = ereg_replace('.*module_idn">', '<h2 align="center"><a name="MODULE_IDN">', $php_info);
+   $php_info = ereg_replace('<h2 align="center"><a name="module_.*', '', $php_info);
+
+   echo($php_info);
+   die();
+} elseif($_REQUEST["show"] == 'functions') {
+	$funcs = get_extension_funcs("idn");
+	foreach($funcs as $func)
+	  echo "$func<br>";
+
+	die();
+}
 
 // Set the locale to UTF-8
 if(!$charset) {
@@ -57,9 +79,9 @@ if(function_exists("idn_to_utf8") && function_exists("idn_to_ascii")) {
 	$domain_out = idn_to_ascii($domain, $charset);
       elseif($rule == '2uni')
 	$domain_out = idn_to_unicode($domain, $charset);
-      elseif($rule == 'punyencode')
       elseif($rule == '2utf8')
 	$domain_out = idn_to_utf8($domain, $charset);
+      elseif($rule == 'punyencode')
 	$domain_out = idn_punycode_encode($domain, $charset);
       elseif($rule == 'punydecode')
 	$domain_out = idn_punycode_decode($domain, $charset);
@@ -101,16 +123,17 @@ if(function_exists("idn_to_utf8") && function_exists("idn_to_ascii")) {
 <?php include("charsets.php"); ?>
       <input type="submit" value="Convert">
     </form>
-
-    <a href="idna.php.txt">show code</a>
 <?php
 } else {
-?>
-    <a href="idna.php.txt">show code</a>
-<?php
     die("Module IDN isn't loaded (can't find function idn_to_utf8 and/or idn_to_ascii)");
 }
 ?>
+  <p>
+  <center>
+    <a href="idn.php?show=source">show code</a> - 
+    <a href="idn.php?show=versions">show versions</a> - 
+    <a href="idn.php?show=functions">show functions</a>
+  </center>
   </body>
 </html>
 
