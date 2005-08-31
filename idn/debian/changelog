@@ -1,3 +1,11 @@
+php4-idn (1.1-3) unstable; urgency=low
+
+  * Merging NMU by Steve Langasek <vorlon@debian.org>
+    - Bump php4-dev build-dep to (>= 4:4.3.10-10)
+    - Drop support for the caudium SAPI, which has been dropped.
+
+ -- Turbo Fredriksson <turbo@debian.org>  Wed, 31 Aug 2005 08:46:09 +0200
+
 php4-idn (1.1-2) unstable; urgency=low
 
   * Merging NMU by Adam Conrad <adconrad@0c3.net>:

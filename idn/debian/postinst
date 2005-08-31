@@ -14,7 +14,7 @@ if [ -n "$2" ]; then
     exit 0
 fi
 
-for pkg in apache cli cgi apache2 caudium; do
+for pkg in apache cli cgi apache2; do
     if [ -f /etc/php4/$pkg/php.ini ]; then
 	if ! grep -q "^[[:space:]]*extension[[:space:]]*=[[:space:]]*idn.so" /etc/php4/$pkg/php.ini; then
 	    echo "You are installing IDN support for php4, but it's not"

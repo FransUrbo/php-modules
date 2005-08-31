@@ -19,7 +19,7 @@ endif
 # Find PHP4 API version - this should probably used in
 php4devver=$(shell dpkg -s php4-dev | grep ^Version | cut -d\  -f2)
 zendapiver=$(shell egrep '\#define ZEND_MODULE_API_NO ' /usr/include/php4/Zend/zend_modules.h|sed 's/\#define ZEND_MODULE_API_NO //')
-phpapiver=$(shell grep '\#define PHP_API_VERSION ' /usr/include/php4/main/php.h |sed 's/\#define PHP_API_VERSION //')-zts
+phpapiver=$(shell grep '\#define PHP_API_VERSION ' /usr/include/php4/main/php.h |sed 's/\#define PHP_API_VERSION //')
 
 configure: configure-stamp
 configure-stamp:
@@ -81,8 +81,8 @@ binary-arch: build install
 	dh_installdeb
 	dh_shlibdeps
 
+	# This would be "zendapi-$(zendapiver)" on Woody.
 	echo "php:Depends=phpapi-$(phpapiver)" >> debian/php4-idn.substvars
-	#(This'll be zendapi-$(zendapiver) on Woody)
 
 	dh_gencontrol
 	dh_md5sums
