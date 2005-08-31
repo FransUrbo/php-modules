@@ -1,3 +1,10 @@
+php4-idn (1.1-5) unstable; urgency=low
+
+  * Forgot to sign the build *sigh*. To used to building local
+    packages which I don't usually sign... Sorry!
+
+ -- Turbo Fredriksson <turbo@debian.org>  Wed, 31 Aug 2005 09:30:13 +0200
+
 php4-idn (1.1-4) unstable; urgency=low
 
   * Rebuild and upload to update the PHP4 API dependencies
