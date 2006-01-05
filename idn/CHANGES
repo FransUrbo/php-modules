@@ -1,3 +1,6 @@
+PHP IDN 1.2 - TO BE ANNOUNCED
+	- GCC 4.1 compiler warnings fixed. Thanx to Robert Scheck.
+
 PHP IDN 1.0 - Wed May 26 2004
 	- Support TLD checking (patch by Thomas Jacob - see THANX_TO).
 	  Functions:	tld_check_8z()

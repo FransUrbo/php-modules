@@ -24,7 +24,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.31 2004-12-18 15:38:43 turbo Exp $ */
+/* $Id: idn.c,v 0.32 2006-01-05 16:23:37 turbo Exp $ */
 
 /* {{{ PHP defines and includes
 
@@ -202,7 +202,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.31 2004-12-18 15:38:43 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.32 2006-01-05 16:23:37 turbo Exp $" );
 	php_info_print_table_row(2, "LibIDN version", STRINGPREP_VERSION);
 	php_info_print_table_end();
 	DISPLAY_INI_ENTRIES();
@@ -891,7 +891,6 @@ PHP_FUNCTION(tld_get)
 PHP_FUNCTION(tld_get_table)
 {
 	const Tld_table * tld_table = NULL;
-	int rc;
 	int ok = 0;
 	int ok_loop = 0;
 	zval **yyinput;
@@ -910,8 +909,8 @@ PHP_FUNCTION(tld_get_table)
 	tld_table = tld_default_table((*yyinput)->value.str.val, NULL);
 	if (tld_table) {
 		if(array_init(return_value) == SUCCESS)
-		if(add_assoc_string(return_value, "name", tld_table->name, 1) == SUCCESS)
-		if(add_assoc_string(return_value, "version", tld_table->version, 1) == SUCCESS)
+		if(add_assoc_string(return_value, "name", (char *) tld_table->name, 1) == SUCCESS)
+		if(add_assoc_string(return_value, "version", (char *) tld_table->version, 1) == SUCCESS)
 		if(add_assoc_long(return_value, "nvalid", tld_table->nvalid) == SUCCESS) {
 			MAKE_STD_ZVAL(intervals);
 			if (array_init(intervals) == SUCCESS) {
