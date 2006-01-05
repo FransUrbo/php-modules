@@ -1,3 +1,10 @@
+php4-idn (1.2-1) unstable; urgency=low
+
+  * New upstream version.
+    - GCC 4.1 compiler warnings fixed.
+
+ --
+
 php4-idn (1.1-5) unstable; urgency=low
 
   * Forgot to sign the build *sigh*. To used to building local
