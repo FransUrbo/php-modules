@@ -75,3 +75,8 @@ clean:
 	rm -fr acinclude.m4 dynlib.m4 configure.in install-sh mkinstalldirs missing \
 		aclocal.m4 config.h.in configure config.guess config.sub ltmain.sh \
 		configure-stamp libs.mk .deps build modules
+
+distclean: clean
+	rm -f config.cache config.log config.status Makefile.objects Makefile.fragments libtool main/php_config.h stamp-h php4.spec sapi/apache/libphp4.module buildmk.stamp
+	egrep define'.*include/php' $(top_srcdir)/configure|sed 's/.*>//'|xargs rm -f
+	find . -name Makefile | xargs rm -f
