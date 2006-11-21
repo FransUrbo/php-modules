@@ -4,7 +4,7 @@ php4-idn (1.2-1) unstable; urgency=low
     - GCC 4.1 compiler warnings fixed.
     - Don't throw fatal error if it can't convert from one string to another.
 
- --
+ -- Turbo Fredriksson <turbo@debian.org>  Tue, 21 Nov 2006 09:13:02 +0100
 
 php4-idn (1.1-8) unstable; urgency=low
 
