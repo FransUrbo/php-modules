@@ -1,5 +1,8 @@
 PHP IDN 1.2 - TO BE ANNOUNCED
 	- GCC 4.1 compiler warnings fixed. Thanx to Robert Scheck.
+	- Don't throw fatal error if it can't convert from one string
+	  to another.
+	  Closes: #302
 
 PHP IDN 1.0 - Wed May 26 2004
 	- Support TLD checking (patch by Thomas Jacob - see THANX_TO).
