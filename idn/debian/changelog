@@ -2,6 +2,7 @@ php4-idn (1.2-1) unstable; urgency=low
 
   * New upstream version.
     - GCC 4.1 compiler warnings fixed.
+    - Don't throw fatal error if it can't convert from one string to another.
 
  --
 
