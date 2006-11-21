@@ -5,6 +5,32 @@ php4-idn (1.2-1) unstable; urgency=low
 
  --
 
+php4-idn (1.1-8) unstable; urgency=low
+
+  * Fix a php5 package as well.
+    + Scratch the whole debian/rules file and take one from the 
+      php-clamavlib (0.12a-2) package.
+  * Bump the Standards-Version to 3.7.2
+  * Reupload source tarball in 'upstream version' (i.e. without the debian
+    directory).
+
+ -- Turbo Fredriksson <turbo@debian.org>  Wed,  8 Nov 2006 13:58:01 +0100
+
+php4-idn (1.1-7) unstable; urgency=low
+
+  * Use the output from 'php-config4 --phpapi' instead of grepping
+    include file to get the PHP API version.
+    Closes: #321619
+
+ -- Turbo Fredriksson <turbo@debian.org>  Tue, 20 Sep 2005 22:35:40 +0200
+
+php4-idn (1.1-6) unstable; urgency=low
+
+  * Re-build and -upload to update with new API Extension version.
+    Closes: #327896
+
+ -- Turbo Fredriksson <turbo@debian.org>  Wed, 14 Sep 2005 14:55:41 +0200
+
 php4-idn (1.1-5) unstable; urgency=low
 
   * Forgot to sign the build *sigh*. To used to building local

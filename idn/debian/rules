@@ -5,6 +5,11 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+BUILD4=$(CURDIR)/debian/php4-idn
+BUILD5=$(CURDIR)/debian/php5-idn
+PHP_EX4=$(shell /usr/bin/php-config4 --extension-dir)
+PHP_EX5=$(shell /usr/bin/php-config5 --extension-dir)
+
 CFLAGS = -Wall -g
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
@@ -16,78 +21,103 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	INSTALL_PROGRAM += -s
 endif
 
-# Find PHP4 API version - this should probably used in
-php4devver=$(shell dpkg -s php4-dev | grep ^Version | cut -d\  -f2)
-zendapiver=$(shell egrep '\#define ZEND_MODULE_API_NO ' /usr/include/php4/Zend/zend_modules.h|sed 's/\#define ZEND_MODULE_API_NO //')
-phpapiver=$(shell grep '\#define PHP_API_VERSION ' /usr/include/php4/main/php.h |sed 's/\#define PHP_API_VERSION //')
+build:
+	@echo "Not use this."
 
-configure: configure-stamp
-configure-stamp:
+build-stamp:
 	dh_testdir
-	phpize
-	./configure
-	touch configure-stamp
-
-build: build-stamp
-build-stamp: configure-stamp 
-	dh_testdir
-	$(MAKE)
 	touch build-stamp
+
+build-stamp-php4: build-stamp
+	-$(MAKE) clean
+	phpize --clean
+	phpize4
+	chmod a+x ./configure
+	./configure --prefix=$(BUILD4)/usr --with-php-config=/usr/bin/php-config4
+	-$(MAKE) DESTDIR=$(BUILD4)
+	touch build-stamp-php4
+
+build-stamp-php5: build-stamp
+	-$(MAKE) clean
+	phpize --clean
+	phpize5
+	chmod a+x ./configure
+	./configure --prefix=$(BUILD5)/usr --with-php-config=/usr/bin/php-config5
+	-$(MAKE) DESTDIR=$(BUILD5)
+	touch build-stamp-php5
 
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp configure-stamp
-
-	-$(MAKE) distclean
-	rm -fr acinclude.m4 dynlib.m4 configure.in install-sh mkinstalldirs missing \
-		aclocal.m4 config.h.in configure config.guess config.sub ltmain.sh \
-		configure-stamp libs.mk .deps build modules reference/functions.xml
-
+	rm -rf build-stamp build-stamp-php5 build-stamp-php4
+	-$(MAKE) clean
+	phpize --clean
 	dh_clean
 
-install: build
+install: build-php4 build-php5
+
+build-php4:
+build-php4: build-stamp-php4
 	dh_testdir
 	dh_testroot
-
-	dh_clean -k
 	dh_installdirs
-
-	(ext=`/usr/bin/php-config --extension-dir`; \
-	 mkdir -p debian/php4-idn/$${ext}; \
-	 install -m 644 -o root -g root  modules/idn.so debian/php4-idn/$${ext}/idn.so)
-
+	mkdir -p debian/php4-idn$(PHP_EX4)
+	install -m 644 -o root -g root modules/idn.so debian/php4-idn$(PHP_EX4)/idn.so
 	mkdir -p debian/php4-idn/usr/share/lintian/overrides
-	echo "php4-idn: no-shlibs-control-file $$ext/idn.so" > debian/php4-idn/usr/share/lintian/overrides/php4-idn
+	echo "php-idn: no-shlibs-control-file $(PHP_EX4)/idn.so" > debian/php4-idn/usr/share/lintian/overrides/php4-idn
 
-# Build architecture-independent files here.
-binary-indep: build install
-# We have nothing to do by default.
-
-# Build architecture-dependent files here.
-binary-arch: build install
+build-php5:
+build-php5: build-stamp-php5
 	dh_testdir
 	dh_testroot
+	dh_installdirs
+	mkdir -p debian/php5-idn$(PHP_EX5)
+	install -m 644 -o root -g root modules/idn.so debian/php5-idn$(PHP_EX5)/idn.so
+	mkdir -p debian/php5-idn/usr/share/lintian/overrides
+	echo "php-idn: no-shlibs-control-file $(PHP_EX5)/idn.so" > debian/php5-idn/usr/share/lintian/overrides/php5-idn
 
-	dh_installchangelogs 
+binary-indep:
+
+binary-arch-php4: DH_OPTIONS='--package=php4-idn --no-package=php5-idn'
+binary-arch-php4: build-php4
+	dh_testdir
+	dh_testroot
+	dh_installdirs
+	dh_installchangelogs CHANGES
+	dh_installdebconf
 	dh_installdocs
-	dh_installman
+	dh_install
 	dh_link
-
 	dh_strip
 	dh_compress
 	dh_fixperms
-
-	dh_installdeb
+	dh_installdeb --package=php4-idn --no-package=php5-idn
 	dh_shlibdeps
-
-	# This would be "zendapi-$(zendapiver)" on Woody.
-	echo "php:Depends=phpapi-$(phpapiver)" >> debian/php4-idn.substvars
-
-	dh_gencontrol
+	echo "php:Depends=phpapi-`php-config4 --phpapi`" >> debian/php4-idn.substvars
+	dh_gencontrol --package=php4-idn --no-package=php5-idn
 	dh_md5sums
+	dh_builddeb --package=php4-idn --no-package=php5-idn
 
-	dh_builddeb
+binary-arch-php5: DH_OPTIONS='--package=php5-idn --no-package=php4-idn'
+binary-arch-php5: build-php5
+	dh_testdir
+	dh_testroot
+	dh_installdirs
+	dh_installchangelogs CHANGES 
+	dh_installdebconf
+	dh_installdocs
+	dh_install
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms 
+	dh_installdeb --package=php5-idn --no-package=php4-idn
+	dh_shlibdeps
+	echo "php:Depends=phpapi-`php-config5 --phpapi`" >> debian/php5-idn.substvars
+	dh_gencontrol --package=php5-idn --no-package=php4-idn
+	dh_md5sums 
+	dh_builddeb --package=php5-idn --no-package=php4-idn 
 
+binary-arch: binary-arch-php4 binary-arch-php5
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+.PHONY: build-php4 build-php5 clean binary-indep binary-arch binary install
