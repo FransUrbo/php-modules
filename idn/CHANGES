@@ -1,4 +1,4 @@
-PHP IDN 1.2 - TO BE ANNOUNCED
+PHP IDN 1.2 - Tue Nov 21 2006
 	- GCC 4.1 compiler warnings fixed. Thanx to Robert Scheck.
 	- Don't throw fatal error if it can't convert from one string
 	  to another.
