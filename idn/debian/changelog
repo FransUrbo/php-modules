@@ -1,3 +1,10 @@
+php4-idn (1.2b-1) unstable; urgency=low
+
+  * New upstream version.
+    - Missed part of the GCC 4.1 compiler warnings patch.
+
+ -- Turbo Fredriksson <turbo@debian.org>  Fri, 24 Nov 2006 10:40:05 +0100
+
 php4-idn (1.2-1) unstable; urgency=low
 
   * New upstream version.
