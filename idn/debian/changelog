@@ -1,3 +1,10 @@
+php4-idn (1.2b-2) unstable; urgency=low
+
+  * templates, config, postinst, postrm and prerm from php4-kadm5.
+    Closes: #408275
+
+ -- Turbo Fredriksson <turbo@debian.org>  Fri, 16 Feb 2007 12:58:31 +0100
+
 php4-idn (1.2b-1) unstable; urgency=low
 
   * New upstream version.
