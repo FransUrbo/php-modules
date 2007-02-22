@@ -52,6 +52,7 @@ clean:
 	rm -rf build-stamp build-stamp-php5 build-stamp-php4
 	-$(MAKE) clean
 	phpize --clean
+	debconf-updatepo
 	dh_clean
 
 install: build-php4 build-php5

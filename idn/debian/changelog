@@ -1,3 +1,10 @@
+php4-idn (1.2b-3) unstable; urgency=low
+
+  * Remove CVS directories from source.
+  * Merge in NMU patch between 1.2b-2 and 1.2b-2.1 by Christian Perrier.
+
+ -- Turbo Fredriksson <turbo@debian.org>  Thu, 22 Feb 2007 17:17:20 +0000
+
 php4-idn (1.2b-2) unstable; urgency=low
 
   * templates, config, postinst, postrm and prerm from php4-kadm5.
