@@ -55,7 +55,7 @@ clean:
 	debconf-updatepo
 	dh_clean
 
-install: build-php4 build-php5
+install: build-php5
 
 build-php4:
 build-php4: build-stamp-php4
@@ -119,6 +119,6 @@ binary-arch-php5: build-php5
 	dh_md5sums 
 	dh_builddeb --package=php5-idn --no-package=php4-idn 
 
-binary-arch: binary-arch-php4 binary-arch-php5
+binary-arch: binary-arch-php5
 binary: binary-indep binary-arch
 .PHONY: build-php4 build-php5 clean binary-indep binary-arch binary install
