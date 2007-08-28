@@ -1,3 +1,15 @@
+php4-idn (1.2b-4) unstable; urgency=low
+
+  * Change the copyright, to add PHP exeption paragraph
+    due to GPL/PHP copyright conflicts.
+  * Don't build the php4 package. PHP4 have been removed from Debian
+    GNU/Linux...
+    Closes: #418316
+  * Fix short description.
+    Closes: #411998
+
+ -- Turbo Fredriksson <turbo@debian.org>  Wed, 29 Aug 2007 00:44:22 +0200
+
 php4-idn (1.2b-3) unstable; urgency=low
 
   * Remove CVS directories from source.
