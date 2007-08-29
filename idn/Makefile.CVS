@@ -6,7 +6,7 @@ DATE    := $(shell date +"%b %e %Y")
 TMPDIR  := $(shell tempfile)
 VERSION := $(shell cat .version | sed 's@\ .*@@')
 INSTDIR := $(TMPDIR)/idn-$(VERSION)
-DESTDIR := $(TMPDIR)/php4-idn-$(VERSION)
+DESTDIR := $(TMPDIR)/php-idn-$(VERSION)
 
 # Make a unified diff over the changes from the last version...
 diff:
@@ -63,8 +63,8 @@ release: tag tarball debian
 	  mv /var/www/php-modules/idn/index.html.out /var/www/php-modules/idn/index.html; \
 	  cp -v $(DESTDIR)/../*.deb /var/www/php-modules/idn/; \
 	  rm /var/www/php-modules/idn/src/*; \
-	  cp $(DESTDIR)/../php4-idn_*.dsc $(DESTDIR)/../php4-idn_*.tar.gz \
-		$(DESTDIR)/../php4-idn_*.changes /var/www/php-modules/idn/src/; \
+	  cp $(DESTDIR)/../php-idn_*.dsc $(DESTDIR)/../php-idn_*.tar.gz \
+		$(DESTDIR)/../php-idn_*.changes /var/www/php-modules/idn/src/; \
 	  rm .tag)
 
 $(INSTDIR):
