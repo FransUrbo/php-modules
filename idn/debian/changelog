@@ -1,3 +1,9 @@
+php-idn (1.2b-5) unstable; urgency=low
+
+  * Change source name to simply 'php-idn'.
+
+ -- Turbo Fredriksson <turbo@debian.org>  Wed, 29 Aug 2007 02:06:09 +0200
+
 php4-idn (1.2b-4) unstable; urgency=low
 
   * Change the copyright, to add PHP exeption paragraph

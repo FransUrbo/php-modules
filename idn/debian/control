@@ -1,4 +1,4 @@
-Source: php4-idn
+Source: php-idn
 Section: web
 Priority: optional
 Maintainer: Turbo Fredriksson <turbo@debian.org>
