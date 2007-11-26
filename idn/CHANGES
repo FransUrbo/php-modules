@@ -1,6 +1,8 @@
 PHP IDN 1.2c - TO BE ANNOUNCED
 	- Modify the license to allow linking with PHP (the GPL and the
 	  PHP license conflicts)
+	- Catch NULL return from idn(). Patch by Daniel Janecke.
+	  Closes: 330
 
 PHP IDN 1.2b - Fri Nov 24 2006
 	- Missed part of the GCC 4.1 compiler warnings patch from

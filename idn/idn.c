@@ -24,7 +24,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.34 2006-11-24 09:34:47 turbo Exp $ */
+/* $Id: idn.c,v 0.35 2007-11-26 21:20:24 turbo Exp $ */
 
 /* {{{ PHP defines and includes
  */
@@ -196,7 +196,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.34 2006-11-24 09:34:47 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.35 2007-11-26 21:20:24 turbo Exp $" );
 	php_info_print_table_row(2, "LibIDN version", STRINGPREP_VERSION);
 	php_info_print_table_end();
 	DISPLAY_INI_ENTRIES();
@@ -697,7 +697,11 @@ PHP_FUNCTION(idn_to_ascii)
 	}
 
 	output = idn((*yyinput)->value.str.val, IDN_IDNA_TO_ASCII, charset);
-	RETVAL_STRINGL(output, strlen(output), 1);
+	if( output == NULL ) {
+		RETURN_NULL();
+	} else {
+		RETVAL_STRINGL(output, strlen(output), 1);
+	}
 	efree(output);
 }
 /* }}} */
@@ -723,7 +727,11 @@ PHP_FUNCTION(idn_to_utf8)
 	}
 
 	output = idn((*yyinput)->value.str.val, IDN_IDNA_TO_UNICODE, "UTF-8");
-	RETVAL_STRINGL(output, strlen(output), 1);
+	if( output == NULL ) {
+		RETURN_NULL();
+	} else {
+		RETVAL_STRINGL(output, strlen(output), 1);
+	}
 	efree(output);
 }
 /* }}} */
@@ -749,7 +757,11 @@ PHP_FUNCTION(idn_to_unicode)
 	}
 
 	output = idn((*yyinput)->value.str.val, IDN_IDNA_TO_UNICODE, charset);
-	RETVAL_STRINGL(output, strlen(output), 1);
+	if( output == NULL ) {
+		RETURN_NULL();
+	} else {
+		RETVAL_STRINGL(output, strlen(output), 1);
+	}
 	efree(output);
 }
 /* }}} */
