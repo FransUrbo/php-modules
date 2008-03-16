@@ -1,0 +1,12 @@
+#!/bin/sh -e
+
+PECL_NAME=idn
+
+if test "$1" = "purge"; then
+	if which ucf >/dev/null 2>&1; then
+		ucf --purge /etc/php5/conf.d/$PECL_NAME.ini
+	fi
+	rm -f /etc/php5/conf.d/$PECL_NAME.ini
+fi
+
+#DEBHELPER#

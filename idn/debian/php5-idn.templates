@@ -1,0 +1,7 @@
+Template: php5/add_extension
+Type: boolean
+Default: true
+_Description: Do you want this extension to be enabled now?
+ You are installing ${extname} support for php4, and it is not yet enabled
+ in the configuration for the ${sapiconfig} SAPI.  Do you want this
+ extension to be enabled now?

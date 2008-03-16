@@ -1,0 +1,41 @@
+#!/bin/sh -e
+
+PECL_NAME=idn
+
+if [ "$DPKG_DEBUG" = "developer" ]; then
+  set -x
+fi
+
+case "$1" in
+	configure)
+
+	# source debconf stuff
+	if [ -f /usr/share/debconf/confmodule ]; then
+		. /usr/share/debconf/confmodule
+	fi
+
+	ucf /usr/share/php5-$PECL_NAME/$PECL_NAME.ini-dist \
+	   /etc/php5/conf.d/$PECL_NAME.ini
+
+	db_get php5/add_extension || true
+	add_extension="$RET"	
+
+	if [ $add_extension = "true" ]; then
+		sed -e "s/#extension/extension/" -i \
+		    /etc/php5/conf.d/$PECL_NAME.ini
+	else
+		sed -e "s/^extension/#extension/" -i \
+		    /etc/php5/conf.d/$PECL_NAME.ini
+	fi
+		
+	;;
+
+	*)
+	
+	echo "postinst called with unknown argument \`$1'" 1>&2
+	exit 1
+	
+	;;
+esac
+
+#DEBHELPER#
