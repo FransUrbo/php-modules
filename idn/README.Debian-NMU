@@ -1,0 +1,17 @@
+Anyone DD that feel the need to do a NMU of this package, don't remove
+PHP4 package references!!
+
+If you do, your NMU fixes will be overwritten very quickly (as soon as
+I find out)!
+
+
+This because I'm both the upstream _and_ the official Debian GNU/Linux
+maintainer and I want to be able to build PHP4 packages and I don't
+want to have differences between the official package and my CVS
+repository (easier to maintain this way).
+
+So you will have to work around any problem you see. As of version
+1.2b-4, any PHP4 packages should not be build so there should be no
+problem in keeping the PHP4 references in...
+
+Turbo Fredriksson
