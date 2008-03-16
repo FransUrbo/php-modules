@@ -1,0 +1,24 @@
+# translation of php-idn debconf to Portuguese
+# Copyright (C) 2008 Américo Monteiro
+# This file is distributed under the same license as the php-idn package.
+#
+# Américo Monteiro <a_monteiro@netcabo.pt>, 2007, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: php-idn_1.2b-5.1_pt\n"
+"Report-Msgid-Bugs-To: php-idn@packages.debian.org\n"
+"POT-Creation-Date: 2008-01-05 12:59-0200\n"
+"PO-Revision-Date: 2008-01-08 18:39+0000\n"
+"Last-Translator: Américo Monteiro <a_monteiro@netcabo.pt>\n"
+"Language-Team: Portuguese <traduz@debianpt.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#. Type: boolean
+#. Description
+#: ../templates:1001
+msgid "Do you want this extension to be enabled now?"
+msgstr "Deseja que esta extensão seja activada agora?"
+

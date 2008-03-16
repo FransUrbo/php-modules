@@ -14,46 +14,41 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: php4-ps:1.3.1-3\n"
-"Report-Msgid-Bugs-To: turbo@debian.org\n"
-"POT-Creation-Date: 2007-02-18 22:48+0100\n"
-"PO-Revision-Date: 2004-09-29 15:30+0200\n"
+"Report-Msgid-Bugs-To: php-idn@packages.debian.org\n"
+"POT-Creation-Date: 2008-01-05 12:59-0200\n"
+"PO-Revision-Date: 2008-01-15 20:59+0100\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
-"Language-Team: Czech <provoz@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: boolean
 #. Description
 #: ../templates:1001
-msgid "Should ${extname} be added to /etc/php4/${sapiconfig}/php.ini?"
-msgstr "M· se ${extname} p¯idat do /etc/php4/${sapiconfig}/php.ini?"
+msgid "Do you want this extension to be enabled now?"
+msgstr "Chcete povolit toto roz≈°√≠≈ôen√≠?"
 
-#. Type: boolean
-#. Description
-#: ../templates:1001
-msgid ""
-"You are installing ${extname} support for php4, and it is not yet enabled in "
-"the configuration for the ${sapiconfig} SAPI.  Do you want this extension to "
-"be enabled now?"
-msgstr ""
-"Instalujete podporu ${extname} pro php4, kter· jeπtÏ nenÌ povolena v "
-"konfiguraci pro ${sapiconfig} SAPI. Chcete povolit tento modul?"
+#~ msgid "Should ${extname} be added to /etc/php5/${sapiconfig}/php.ini?"
+#~ msgstr "M√° se ${extname} p≈ôidat do /etc/php5/${sapiconfig}/php.ini?"
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Should ${extname} be removed from /etc/php4/${sapiconfig}/php.ini?"
-msgstr "M· se ${extname} odstranit z /etc/php4/${sapiconfig}/php.ini?"
+#~ msgid ""
+#~ "You are installing ${extname} support for php5, and it is not yet enabled "
+#~ "in the configuration for the ${sapiconfig} SAPI.  Do you want this "
+#~ "extension to be enabled now?"
+#~ msgstr ""
+#~ "Instalujete podporu ${extname} pro php5, kter√° je≈°tƒõ nen√≠ povolena v "
+#~ "konfiguraci pro ${sapiconfig} SAPI. Chcete povolit tento modul?"
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"You are removing ${extname} support for php4, but it is still enabled in the "
-"configuration for the ${sapiconfig} SAPI.  Leaving this in place will "
-"probably cause problems when trying to use PHP."
-msgstr ""
-"OdstraÚujete podporu ${extname} pro php4, kter· je st·le povolena v "
-"konfiguraci pro ${sapiconfig} SAPI. To m˘æe zp˘sobit problÈmy p¯i pouæÌv·nÌ "
-"PHP."
+#~ msgid "Should ${extname} be removed from /etc/php5/${sapiconfig}/php.ini?"
+#~ msgstr "M√° se ${extname} odstranit z /etc/php5/${sapiconfig}/php.ini?"
+
+#~ msgid ""
+#~ "You are removing ${extname} support for php5, but it is still enabled in "
+#~ "the configuration for the ${sapiconfig} SAPI.  Leaving this in place will "
+#~ "probably cause problems when trying to use PHP."
+#~ msgstr ""
+#~ "Odstra≈àujete podporu ${extname} pro php5, kter√° je st√°le povolena v "
+#~ "konfiguraci pro ${sapiconfig} SAPI. To m≈Ø≈æe zp≈Øsobit probl√©my p≈ôi "
+#~ "pou≈æ√≠v√°n√≠ PHP."
+

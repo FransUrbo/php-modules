@@ -1,3 +1,43 @@
+php-idn (1.2b-6) unstable; urgency=low
+
+  * Updated Dutch debconf template.
+    Closes: #463799
+
+ -- Turbo Fredriksson <turbo@debian.org>  Sun, 16 Mar 2008 19:04:06 +0000
+
+php-idn (1.2b-5.2) unstable; urgency=low
+
+  * Non-maintainer upload
+  * Updated debconf templates translation:
+    - Portuguese (Closes: #459969)
+    - Vietnamese (Closes: #460033)
+    - Turkish (Closes: #460632)
+    - Czech (Closes: #460951)
+    - French (Closes: #461105)
+    - Brazilian Portuguese (Closes: #461113)
+    - German (Closes: #462278)
+    - Japanese (Closes: #462400)
+
+ -- Marcelo Jorge Vieira (metal) <metal@alucinados.com>  Sat, 26 Jan 2008 20:51:15 -0200
+
+php-idn (1.2b-5.1) unstable; urgency=low
+
+  * Non-maintainer upload
+  * Fixed many references to the php4 (Closes: #457585)
+  * Updated Standards-Version to 3.7.3
+  * Added Portuguese debconf templates translation (Closes: #441336)
+  * Removed changes made directly on php.ini (Closes: #452778)
+  * Changed postinst, postrm, config and templates
+  * Removed prerm script
+  * Fixed missing debconf dependency
+  * Fixed debian-rules-ignores-make-clean-error
+  * Fixed diff-contains-cvs-control-dir
+  * Fixed malformed-override
+  * Added README.Debian
+  * Added idn.ini
+
+ -- Marcelo Jorge Vieira (metal) <metal@alucinados.com>  Sat, 05 Jan 2008 01:09:31 -0200
+
 php-idn (1.2b-5) unstable; urgency=low
 
   * Change source name to simply 'php-idn'.

@@ -8,13 +8,13 @@
 # or http://www.debian.org/intl/l10n/po-debconf/README-trans
 # Developers do not need to manually edit POT or PO files.
 # , fuzzy
-# 
-# 
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: php4-kadm5 0.2.4-4\n"
-"Report-Msgid-Bugs-To: turbo@debian.org\n"
-"POT-Creation-Date: 2007-02-18 22:48+0100\n"
+"Report-Msgid-Bugs-To: php-idn@packages.debian.org\n"
+"POT-Creation-Date: 2008-01-05 12:59-0200\n"
 "PO-Revision-Date: 2005-09-29 18:58-0700\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -25,34 +25,42 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../templates:1001
-msgid "Should ${extname} be added to /etc/php4/${sapiconfig}/php.ini?"
-msgstr "Ska ${extname} läggas till i /etc/php4/${sapiconfig}/php.ini?"
-
-#. Type: boolean
-#. Description
-#: ../templates:1001
-msgid ""
-"You are installing ${extname} support for php4, and it is not yet enabled in "
-"the configuration for the ${sapiconfig} SAPI.  Do you want this extension to "
-"be enabled now?"
+msgid "Do you want this extension to be enabled now?"
 msgstr ""
-"Du installerar ${extname} stöd för php4 och den är ännu inte aktiverad i "
-"konfigurationen för ${sapiconfig} SAPI.  Vill du aktivera den nu?"
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Should ${extname} be removed from /etc/php4/${sapiconfig}/php.ini?"
-msgstr "Ska ${extname} raderas från /etc/php4/${sapiconfig}/php.ini?"
+#, fuzzy
+#~| msgid "Should ${extname} be added to /etc/php4/${sapiconfig}/php.ini?"
+#~ msgid "Should ${extname} be added to /etc/php5/${sapiconfig}/php.ini?"
+#~ msgstr "Ska ${extname} läggas till i /etc/php4/${sapiconfig}/php.ini?"
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"You are removing ${extname} support for php4, but it is still enabled in the "
-"configuration for the ${sapiconfig} SAPI.  Leaving this in place will "
-"probably cause problems when trying to use PHP."
-msgstr ""
-"Du tar bort ${extname} stödet för php4 och den är fortfarande aktiverad i "
-"konfigurationen för ${sapiconfig} SAPI.  Lämna den aktiverad kan skapa "
-"problem när du använder PHP."
+#, fuzzy
+#~| msgid ""
+#~| "You are installing ${extname} support for php4, and it is not yet "
+#~| "enabled in the configuration for the ${sapiconfig} SAPI.  Do you want "
+#~| "this extension to be enabled now?"
+#~ msgid ""
+#~ "You are installing ${extname} support for php5, and it is not yet enabled "
+#~ "in the configuration for the ${sapiconfig} SAPI.  Do you want this "
+#~ "extension to be enabled now?"
+#~ msgstr ""
+#~ "Du installerar ${extname} stöd för php4 och den är ännu inte aktiverad i "
+#~ "konfigurationen för ${sapiconfig} SAPI.  Vill du aktivera den nu?"
+
+#, fuzzy
+#~| msgid "Should ${extname} be removed from /etc/php4/${sapiconfig}/php.ini?"
+#~ msgid "Should ${extname} be removed from /etc/php5/${sapiconfig}/php.ini?"
+#~ msgstr "Ska ${extname} raderas från /etc/php4/${sapiconfig}/php.ini?"
+
+#, fuzzy
+#~| msgid ""
+#~| "You are removing ${extname} support for php4, but it is still enabled in "
+#~| "the configuration for the ${sapiconfig} SAPI.  Leaving this in place "
+#~| "will probably cause problems when trying to use PHP."
+#~ msgid ""
+#~ "You are removing ${extname} support for php5, but it is still enabled in "
+#~ "the configuration for the ${sapiconfig} SAPI.  Leaving this in place will "
+#~ "probably cause problems when trying to use PHP."
+#~ msgstr ""
+#~ "Du tar bort ${extname} stödet för php4 och den är fortfarande aktiverad i "
+#~ "konfigurationen för ${sapiconfig} SAPI.  Lämna den aktiverad kan skapa "
+#~ "problem när du använder PHP."

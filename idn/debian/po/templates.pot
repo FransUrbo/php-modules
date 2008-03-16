@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: turbo@debian.org\n"
-"POT-Creation-Date: 2007-02-18 22:48+0100\n"
+"Report-Msgid-Bugs-To: php-idn@packages.debian.org\n"
+"POT-Creation-Date: 2008-01-05 12:59-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,29 +19,5 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../templates:1001
-msgid "Should ${extname} be added to /etc/php4/${sapiconfig}/php.ini?"
-msgstr ""
-
-#. Type: boolean
-#. Description
-#: ../templates:1001
-msgid ""
-"You are installing ${extname} support for php4, and it is not yet enabled in "
-"the configuration for the ${sapiconfig} SAPI.  Do you want this extension to "
-"be enabled now?"
-msgstr ""
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Should ${extname} be removed from /etc/php4/${sapiconfig}/php.ini?"
-msgstr ""
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"You are removing ${extname} support for php4, but it is still enabled in the "
-"configuration for the ${sapiconfig} SAPI.  Leaving this in place will "
-"probably cause problems when trying to use PHP."
+msgid "Do you want this extension to be enabled now?"
 msgstr ""

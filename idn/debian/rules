@@ -38,7 +38,7 @@ build-stamp-php4: build-stamp
 	touch build-stamp-php4
 
 build-stamp-php5: build-stamp
-	-$(MAKE) clean
+	[ ! -f Makefile ] || $(MAKE) distclean
 	phpize --clean
 	phpize5
 	chmod a+x ./configure
@@ -49,15 +49,21 @@ build-stamp-php5: build-stamp
 clean:
 	dh_testdir
 	dh_testroot
-	rm -rf build-stamp build-stamp-php5 build-stamp-php4
-	-$(MAKE) clean
+	rm -rf build-stamp build-stamp-php5
+	rm -rf tests/CVS
+	rm -rf CVS
+	rm -rf debian/CVS
+	rm -rf debian/po/CVS
+	rm -rf reference/CVS
+	rm -rf reference/functions/CVS
+	rm -rf entities/CVS
+	[ ! -f Makefile ] || $(MAKE) distclean
 	phpize --clean
 	debconf-updatepo
 	dh_clean
 
 install: build-php5
 
-build-php4:
 build-php4: build-stamp-php4
 	dh_testdir
 	dh_testroot
@@ -67,15 +73,12 @@ build-php4: build-stamp-php4
 	mkdir -p debian/php4-idn/usr/share/lintian/overrides
 	echo "php-idn: no-shlibs-control-file $(PHP_EX4)/idn.so" > debian/php4-idn/usr/share/lintian/overrides/php4-idn
 
-build-php5:
 build-php5: build-stamp-php5
 	dh_testdir
 	dh_testroot
 	dh_installdirs
 	mkdir -p debian/php5-idn$(PHP_EX5)
 	install -m 644 -o root -g root modules/idn.so debian/php5-idn$(PHP_EX5)/idn.so
-	mkdir -p debian/php5-idn/usr/share/lintian/overrides
-	echo "php-idn: no-shlibs-control-file $(PHP_EX5)/idn.so" > debian/php5-idn/usr/share/lintian/overrides/php5-idn
 
 binary-indep:
 
@@ -88,6 +91,11 @@ binary-arch-php4: build-php4
 	dh_installdebconf
 	dh_installdocs
 	dh_install
+
+	# config
+	mkdir -p debian/php5-idn/usr/share/php5-idn/
+	cp debian/idn.ini debian/php5-idn/usr/share/php5-idn/idn.ini-dist
+
 	dh_link
 	dh_strip
 	dh_compress

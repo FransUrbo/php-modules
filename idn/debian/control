@@ -3,7 +3,8 @@ Section: web
 Priority: optional
 Maintainer: Turbo Fredriksson <turbo@debian.org>
 Build-Depends: debhelper (>> 4.0.0), binutils, php5-dev, libidn11-dev | libidn9-dev (>= 0.2.1), po-debconf
-Standards-Version: 3.5.8
+Standards-Version: 3.7.3
+Homepage: http://php-idn.bayour.com
 
 Package: php4-idn
 Architecture: any
@@ -15,7 +16,7 @@ Description: PHP API for the IDNA library
 
 Package: php5-idn
 Architecture: any
-Depends: ${shlibs:Depends}, ${php:Depends}
+Depends: ${shlibs:Depends}, ${php:Depends}, ${misc:Depends}, ucf
 Description: PHP API for the IDNA library
  This is the PHP(5) API for the GNU LibIDN software. It's intention is
  to have international characters in the DNS system.

@@ -1,0 +1,16 @@
+php-idn for Debian GNU/Linux
+-------------------------------
+
+To enable the IDN, perform the following steps:
+
+   1. Edit '/etc/php5/conf.d/idn.ini' file removing '#' from
+      '#extension=idn.so' and save file.
+
+   2. Restart your webserver.
+   
+   3. Write a PHP page that calls "phpinfo();" Load it in a browser and
+      look for the info on the IDN module. If you see it, you have been
+      successful!
+
+
+ -- Marcelo Jorge Vieira (metal) <metal@alucinados.com>  Sat, 05 Jan 2008 12:52:02 -0200
