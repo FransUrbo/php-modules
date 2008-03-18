@@ -5,6 +5,7 @@ PHP IDN 1.2c - TO BE ANNOUNCED
 	  Closes: 330
 	- Debian GNU/Linux packaging fixes by Marcelo Jorge Vieira in
 	  NMU uploads.
+	- De-globalize variables in tests/idn.php.
 
 PHP IDN 1.2b - Fri Nov 24 2006
 	- Missed part of the GCC 4.1 compiler warnings patch from

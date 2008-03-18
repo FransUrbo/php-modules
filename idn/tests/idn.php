@@ -1,5 +1,5 @@
 <?php
-/* $Id: idn.php,v 1.10 2004-05-26 08:47:38 turbo Exp $ */
+/* $Id: idn.php,v 1.11 2008-03-18 12:14:07 turbo Exp $ */
 
 if($_REQUEST["show"] == 'source') {
 	show_source(__FILE__);
@@ -24,13 +24,13 @@ if($_REQUEST["show"] == 'source') {
 }
 
 // Set the locale to UTF-8
-if(!$charset) {
-  $charset = 'ISO-8859-1';
+if(!$_REQUEST["charset"]) {
+  $_REQUEST["charset"] = 'ISO-8859-1';
 }
 ?>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=<?=$charset?>">
+    <meta http-equiv="Content-Type" content="text/html; charset=<?=$_REQUEST["charset"]?>">
   </head>
 
   <body>
@@ -55,47 +55,47 @@ function pql_execute($command, $hide=true) {
 }
 
 if(function_exists("idn_to_utf8") && function_exists("idn_to_ascii")) {
-  if($domain) {
+  if($_REQUEST["domain"]) {
     // Convert the value
-    if($form) {
-      if($rule == 'name')
-	$domain_out = idn_prep_name($domain, $charset);
-      elseif($rule == 'krb')
-	$domain_out = idn_prep_kerberos5($domain, $charset);
-      elseif($rule == 'node')
-	$domain_out = idn_prep_node($domain, $charset);
-      elseif($rule == 'resource')
-	$domain_out = idn_prep_resource($domain, $charset);
-      elseif($rule == 'plain')
-	$domain_out = idn_prep_plain($domain, $charset);
-      elseif($rule == 'trace')
-	$domain_out = idn_prep_trace($domain, $charset);
-      elseif($rule == 'sasl')
-	$domain_out = idn_prep_sasl($domain, $charset);
-      elseif($rule == 'iscsi')
-	$domain_out = idn_prep_iscsi($domain, $charset);
+    if($_REQUEST["form"]) {
+      if($_REQUEST["rule"] == 'name')
+	$_REQUEST["domain_out"] = idn_prep_name($_REQUEST["domain"], $_REQUEST["charset"]);
+      elseif($_REQUEST["rule"] == 'krb')
+	$_REQUEST["domain_out"] = idn_prep_kerberos5($_REQUEST["domain"], $_REQUEST["charset"]);
+      elseif($_REQUEST["rule"] == 'node')
+	$_REQUEST["domain_out"] = idn_prep_node($_REQUEST["domain"], $_REQUEST["charset"]);
+      elseif($_REQUEST["rule"] == 'resource')
+	$_REQUEST["domain_out"] = idn_prep_resource($_REQUEST["domain"], $_REQUEST["charset"]);
+      elseif($_REQUEST["rule"] == 'plain')
+	$_REQUEST["domain_out"] = idn_prep_plain($_REQUEST["domain"], $_REQUEST["charset"]);
+      elseif($_REQUEST["rule"] == 'trace')
+	$_REQUEST["domain_out"] = idn_prep_trace($_REQUEST["domain"], $_REQUEST["charset"]);
+      elseif($_REQUEST["rule"] == 'sasl')
+	$_REQUEST["domain_out"] = idn_prep_sasl($_REQUEST["domain"], $_REQUEST["charset"]);
+      elseif($_REQUEST["rule"] == 'iscsi')
+	$_REQUEST["domain_out"] = idn_prep_iscsi($_REQUEST["domain"], $_REQUEST["charset"]);
     } else {
-      if($rule == '2ascii')
-	$domain_out = idn_to_ascii($domain, $charset);
-      elseif($rule == '2uni')
-	$domain_out = idn_to_unicode($domain, $charset);
-      elseif($rule == '2utf8')
-	$domain_out = idn_to_utf8($domain, $charset);
-      elseif($rule == 'punyencode')
-	$domain_out = idn_punycode_encode($domain, $charset);
-      elseif($rule == 'punydecode')
-	$domain_out = idn_punycode_decode($domain, $charset);
+      if($_REQUEST["rule"] == '2ascii')
+	$_REQUEST["domain_out"] = idn_to_ascii($_REQUEST["domain"], $_REQUEST["charset"]);
+      elseif($_REQUEST["rule"] == '2uni')
+	$_REQUEST["domain_out"] = idn_to_unicode($_REQUEST["domain"], $_REQUEST["charset"]);
+      elseif($_REQUEST["rule"] == '2utf8')
+	$_REQUEST["domain_out"] = idn_to_utf8($_REQUEST["domain"], $_REQUEST["charset"]);
+      elseif($_REQUEST["rule"] == 'punyencode')
+	$_REQUEST["domain_out"] = idn_punycode_encode($_REQUEST["domain"], $_REQUEST["charset"]);
+      elseif($_REQUEST["rule"] == 'punydecode')
+	$_REQUEST["domain_out"] = idn_punycode_decode($_REQUEST["domain"], $_REQUEST["charset"]);
       else
-	die("Non supported conversion '$rule'");
+	die("Non supported conversion '".$_REQUEST["rule"]."'");
     }
     
     // Output the result (could contain the error message)
-    echo "$domain: '$domain_out'<br>";
-    $domain = $domain_out;
+    echo $_REQUEST["domain"].": '".$_REQUEST["domain_out"]."'<br>";
+    $_REQUEST["domain"] = $_REQUEST["domain_out"];
   }
 ?>
     <form action="<?=$PHP_SELF?>" method="post">
-      <input type="text" name="domain" value="<?=$domain?>" size="50">
+      <input type="text" name="domain" value="<?=$_REQUEST["domain"]?>" size="50">
       <select name="rule">
         <option value="2ascii">UNICODE 2 ASCII</option>
         <option value="2uni">ASCII 2 UNICODE</option>
@@ -108,7 +108,7 @@ if(function_exists("idn_to_utf8") && function_exists("idn_to_ascii")) {
     </form>
 
     <form action="<?=$PHP_SELF?>" method="post">
-      <input type="text" name="domain" value="<?=$domain?>" size="50">
+      <input type="text" name="domain" value="<?=$_REQUEST["domain"]?>" size="50">
       <input type="hidden" name="form" value="stringprep">
       <select name="rule">
 	<option value="name">Nameprep</option>
