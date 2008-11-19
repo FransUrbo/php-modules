@@ -26,6 +26,6 @@ This will take some time, because (unfortunatly!) it builds EVERYTHING
 ----- s n i p -----
 cd /tmp/phpdoc
 autoconf
-./configure
-make
+php configure.php
+php -d /tmp/phpdoc/.manual.xml
 ----- s n i p -----
