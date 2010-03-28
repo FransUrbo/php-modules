@@ -1,0 +1,31 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" != "remove" -a "$1" != "purge" ]; then
+	exit 0
+fi
+
+for pkg in apache cli cgi; do
+    if [ -f /etc/php4/$pkg/php.ini ]; then
+	if grep -q "^[[:space:]]*extension[[:space:]]*=[[:space:]]*idn.so" /etc/php4/$pkg/php.ini; then
+	    echo "You are removing IDN support for php4, but it is still"
+	    echo "enabled in your /etc/php4/$pkg/php.ini."
+	    echo
+	    echo "You should remove this line:"
+	    echo
+	    echo "extension=idn.so"
+	    echo
+	    echo -n "Do you want me to do it now [Y/n] ?"
+	    read a
+	    if ! echo $a | grep -iq ^n; then
+		cat /etc/php4/$pkg/php.ini | \
+		    grep -v "^[[:space:]]*extension[[:space:]]*=[[:space:]]*idn.so" \
+		    > /etc/php4/$pkg/php.ini.idnremove
+		mv /etc/php4/$pkg/php.ini.idnremove /etc/php4/$pkg/php.ini
+	    fi
+	fi
+    fi
+done
+
+exit 0
