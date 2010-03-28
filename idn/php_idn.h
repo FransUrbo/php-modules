@@ -59,8 +59,10 @@ PHP_FUNCTION(idn_prep_iscsi);
 
 PHP_FUNCTION(idn_punycode_encode);
 PHP_FUNCTION(idn_punycode_decode);
+#if ZEND_MODULE_API_NO < 20090626
 PHP_FUNCTION(idn_to_ascii);
 PHP_FUNCTION(idn_to_utf8);
+#endif
 PHP_FUNCTION(idn_to_unicode);
 
 #ifdef HAVE_IDN_TLD

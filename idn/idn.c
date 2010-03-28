@@ -24,7 +24,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: idn.c,v 0.35 2007-11-26 21:20:24 turbo Exp $ */
+/* $Id: idn.c,v 0.36 2010-03-28 15:17:54 turbo Exp $ */
 
 /* {{{ PHP defines and includes
  */
@@ -104,8 +104,10 @@ function_entry idn_functions[] = {
 
 	PHP_FE(idn_punycode_encode,				NULL)
 	PHP_FE(idn_punycode_decode,				NULL)
+#if ZEND_MODULE_API_NO < 20090626
 	PHP_FE(idn_to_ascii,					NULL)
 	PHP_FE(idn_to_utf8,						NULL)
+#endif
 	PHP_FE(idn_to_unicode,					NULL)
 
 #ifdef HAVE_IDN_TLD
@@ -196,7 +198,7 @@ PHP_MINFO_FUNCTION(idn)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "IDN support", "enabled");
-	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.35 2007-11-26 21:20:24 turbo Exp $" );
+	php_info_print_table_row(2, "RCS Version", "$Id: idn.c,v 0.36 2010-03-28 15:17:54 turbo Exp $" );
 	php_info_print_table_row(2, "LibIDN version", STRINGPREP_VERSION);
 	php_info_print_table_end();
 	DISPLAY_INI_ENTRIES();
@@ -676,6 +678,7 @@ PHP_FUNCTION(idn_punycode_decode)
 /*     IDNA wrappers     */
 /* --------------------- */
 
+#if ZEND_MODULE_API_NO < 20090626
 /* {{{ proto string idn_to_ascii(string input [, string charset])
    Convert to ACE according to IDNA
  */
@@ -735,6 +738,7 @@ PHP_FUNCTION(idn_to_utf8)
 	efree(output);
 }
 /* }}} */
+#endif
 
 /* {{{ proto string idn_to_unicode(string input [, string charset])
    Convert from ACE according to IDNA
